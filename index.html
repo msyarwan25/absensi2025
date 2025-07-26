@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Absensi Siswa - SMP NEGERI BINUANG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .header-title {
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Hide and show views */
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="min-h-screen container mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <header class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="header-title text-2xl md:text-3xl font-bold text-blue-600">SMP NEGERI BINUANG</h1>
+                    <p class="text-gray-500">Sistem Absensi Siswa Digital</p>
+                </div>
+                <div id="clock" class="text-right mt-4 md:mt-0 bg-gray-100 p-3 rounded-lg">
+                    <p class="font-semibold text-lg" id="time-display"></p>
+                    <p class="text-sm text-gray-600" id="date-display"></p>
+                </div>
+            </div>
+            <nav class="mt-6 border-t pt-4 flex space-x-2">
+                <button id="nav-absen" class="btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-sm">
+                    Input Absensi
+                </button>
+                <button id="nav-rekap" class="btn bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-lg">
+                    Rekap Absensi
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Absensi View -->
+            <div id="view-absen" class="view active">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4 border-b pb-2">Formulir Absensi Siswa</h2>
+                    <form id="attendance-form">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label for="class-select" class="block text-sm font-medium text-gray-700 mb-1">Pilih Kelas</label>
+                                <select id="class-select" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">-- Pilih Kelas --</option>
+                                    <option value="VII.1">VII.1</option>
+                                    <option value="VII.2">VII.2</option>
+                                    <option value="VIII.1">VIII.1</option>
+                                    <option value="VIII.2">VIII.2</option>
+                                    <option value="IX.1">IX.1</option>
+                                    <option value="IX.2">IX.2</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="subject-select" class="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran</label>
+                                <select id="subject-select" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                    <option>IPA</option>
+                                    <option>INFORMATIKA</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="date-input" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                                <input type="date" id="date-input" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <div id="student-list-container" class="mt-6">
+                            <p class="text-center text-gray-500">Silakan pilih kelas untuk menampilkan daftar siswa.</p>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-end">
+                            <button type="submit" id="submit-button" class="btn bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg flex items-center" disabled>
+                                <svg id="submit-icon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span id="submit-text">Simpan Absensi</span>
+                                <svg id="submit-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                  </svg>
+                            </button>
+                        </div>
+                    </form>
+                    <div id="status-message" class="mt-4 text-center"></div>
+                </div>
+            </div>
+
+            <!-- Rekap View -->
+            <div id="view-rekap" class="view">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4 border-b pb-2">Rekapitulasi Absensi</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="filter-name" class="block text-sm font-medium text-gray-700 mb-1">Filter Nama Siswa</label>
+                            <input type="text" id="filter-name" placeholder="Ketik nama untuk mencari..." class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="filter-date" class="block text-sm font-medium text-gray-700 mb-1">Filter Tanggal</label>
+                            <input type="date" id="filter-date" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                    
+                    <!-- FITUR BARU: Ringkasan per siswa -->
+                    <div id="recap-summary" class="hidden mb-6 bg-blue-50 border border-blue-200 p-4 rounded-lg transition-all duration-300">
+                        <h3 class="text-lg font-bold text-blue-800 mb-3">Ringkasan untuk: <span id="summary-student-name" class="text-blue-900"></span></h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="bg-green-100 p-3 rounded-lg shadow-sm">
+                                <p class="text-2xl font-bold text-green-800" id="summary-hadir">0</p>
+                                <p class="text-sm font-medium text-green-700">Hadir</p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-lg shadow-sm">
+                                <p class="text-2xl font-bold text-yellow-800" id="summary-sakit">0</p>
+                                <p class="text-sm font-medium text-yellow-700">Sakit</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg shadow-sm">
+                                <p class="text-2xl font-bold text-blue-800" id="summary-izin">0</p>
+                                <p class="text-sm font-medium text-blue-700">Izin</p>
+                            </div>
+                            <div class="bg-red-100 p-3 rounded-lg shadow-sm">
+                                <p class="text-2xl font-bold text-red-800" id="summary-alfa">0</p>
+                                <p class="text-sm font-medium text-red-700">Alfa</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">NIS</th>
+                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Lengkap</th>
+                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
+                                    <th class="py-3 px-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Ket.</th>
+                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kelas</th>
+                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Mata Pelajaran</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recap-table-body">
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
+                        <div id="recap-loading" class="text-center py-8">
+                            <p class="text-gray-500">Memuat data rekapitulasi...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- DATA SISWA ---
+        const studentsData = {
+            'VII.1': [
+                { nis: '1', nama: 'AURA IDRIS' }, { nis: '2', nama: 'AHMAD FAUZAN' }, { nis: '3', nama: 'AHMAD HIDAYAT' },
+                { nis: '4', nama: 'ANUGRAH HAYU' }, { nis: '5', nama: 'ATIKA DEFI' }, { nis: '6', nama: 'AZILA AZZAHRA' },
+                { nis: '7', nama: 'KHASRAPUL HABIB' }, { nis: '8', nama: 'MUH.AIMAN SYAH' }, { nis: '9', nama: 'MUH.ALIF' },
+                { nis: '10', nama: 'MUH.ANUGRAH' }, { nis: '11', nama: 'MUH.ARYA' }, { nis: '12', nama: 'MUH.RAMADHAN RUSMAN' },
+                { nis: '13', nama: 'MUHAMMAD IMRAN' }, { nis: '14', nama: 'NABILA' }, { nis: '15', nama: 'NUR ANIDA NURDIN' },
+                { nis: '16', nama: 'NUR AZILAH' }, { nis: '17', nama: 'NURUL ANNISA' }, { nis: '18', nama: 'RITA PARADIBA' },
+                { nis: '19', nama: 'SUKUR' }, { nis: '20', nama: 'SYAFIRA' }, { nis: '21', nama: 'ZAKHWAN AHMAD NOVAL' }
+            ],
+            'VII.2': [
+                { nis: '1', nama: 'ALIM FIKRI' }, { nis: '2', nama: 'ALYA ARFAN' }, { nis: '3', nama: 'ANUGRAH NURUSTAZAH' },
+                { nis: '4', nama: 'DIAN VIRGINIA ARNA' }, { nis: '5', nama: 'DUL JALAL WAL IKRAM' }, { nis: '6', nama: 'JASYAN GALBYANA' },
+                { nis: '7', nama: 'MUH.ADAM AL FATIH' }, { nis: '8', nama: 'MUH.FARDAN' }, { nis: '9', nama: 'MUH.HARDYAN' },
+                { nis: '10', nama: 'MUH.IKZAN' }, { nis: '11', nama: 'MUH.MULIADI' }, { nis: '12', nama: 'MUH.REZKY' },
+                { nis: '13', nama: 'MUHAMMAD DWI FARHAN' }, { nis: '14', nama: 'MUHAMMAD FADLI ADRIAN' }, { nis: '15', nama: 'MUHAMMAD SULFIANDI' },
+                { nis: '16', nama: 'NASRAH' }, { nis: '17', nama: 'NIRMADANI SAFITRI' }, { nis: '18', nama: 'NUR AZMITA' },
+                { nis: '19', nama: 'NURHALIZA' }, { nis: '20', nama: 'SALDI FEBRIANSA' }, { nis: '21', nama: 'YENI ANGRENI' }, { nis: '22', nama: 'ZASKIA GAMA' }
+            ],
+            'VIII.1': [
+                { nis: '2024342', nama: 'A. BESSE INTAN GALI GALI' }, { nis: '2024343', nama: 'ALDI' }, { nis: '2024344', nama: 'ANDI CAHAYA RAMADHANI, AJ' },
+                { nis: '2024345', nama: 'ANDI MAHERA' }, { nis: '2024346', nama: 'FAISAL' }, { nis: '2024347', nama: 'FIRMANSYAH' },
+                { nis: '2024348', nama: 'HASTATI' }, { nis: '2024349', nama: 'IRFANSYAH IBRAHIM' }, { nis: '2024350', nama: 'LESTARI' },
+                { nis: '2024351', nama: 'M. RIJAL' }, { nis: '2024352', nama: 'MUH. MULYA' }, { nis: '2024353', nama: 'MUHAMMAD ASWAR ALHABSI' },
+                { nis: '2024354', nama: 'MUHAMMAD FIKRAN' }, { nis: '2024355', nama: 'MUHAMMAD RIFKI LUKMAN' }, { nis: '2024356', nama: 'NURWAVIA' },
+                { nis: '2024357', nama: 'PUTRI YASMIN' }, { nis: '2024358', nama: 'RIZKI FAHRI ANUGRAH' }, { nis: '2024359', nama: 'SAMSIR' },
+                { nis: '2024360', nama: 'SITI NUR AZZAHRAH' }, { nis: '2024361', nama: 'SITI NURUL SYAFIQAH' }, { nis: '2024379', nama: 'ZASKIA APRILIA' }
+            ],
+            'VIII.2': [
+                { nis: '2024361', nama: 'AENI' }, { nis: '2024362', nama: 'AL IKRAM' }, { nis: '2024363', nama: 'AUREL' },
+                { nis: '2024364', nama: 'DEVI ALDIANTI' }, { nis: '2024365', nama: 'ERSYA ANATASYA' }, { nis: '2024366', nama: 'HALIFAH AMIRUDDIN' },
+                { nis: '2024367', nama: 'INTAN' }, { nis: '2024368', nama: 'MUH. ALIF' }, { nis: '2024369', nama: 'MUHAMMAD AIMAN' },
+                { nis: '2024370', nama: 'MUHAMMAD NASRIL' }, { nis: '2024371', nama: 'MUHAMMAD REZA ANWAR' }, { nis: '2024372', nama: 'NABILA' },
+                { nis: '2024373', nama: 'NATASYA' }, { nis: '2024374', nama: 'NURUL AINUN SAKINAH' }, { nis: '2024375', 'nama': 'PERDI' },
+                { nis: '2024376', nama: 'REZKY' }, { nis: '2024377', nama: 'SHOHIH MUSLIM ABI AKBAR' }, { nis: '2024378', nama: 'TINA INDRISARI' },
+                { nis: '2025378', nama: 'ABDUL MULIADIL' }, { nis: '2025376', nama: 'MUHAMMAD HAIKAL' }
+            ],
+            'IX.1': [
+                { nis: '2024339', nama: 'ADELIA MARWAH' }, { nis: '2023335', nama: 'AFGAN' }, { nis: '2023296', nama: 'ALFIYA SYAHRANI' },
+                { nis: '2023330', nama: 'ALYA REGINA' }, { nis: '2023298', nama: 'ARIF' }, { nis: '2023300', nama: 'BUNGA CITRA LESTARI' },
+                { nis: '2023303', nama: 'IKRAM' }, { nis: '2023307', nama: 'MUH.ANDRI ILHAM' }, { nis: '2023331', nama: 'MUH.DAVID' },
+                { nis: '2023308', nama: 'MUH.SYASWI GAISAN' }, { nis: '2023329', nama: 'MUHAMMAD RESKI' }, { nis: '2024338', nama: 'NUR FITRI' },
+                { nis: '2023316', nama: 'NUR AENI' }, { nis: '2023319', nama: 'NUR HIKMAH' }, { nis: '2023321', nama: 'NURUL AZIZAH SULTAN' },
+                { nis: '2023322', nama: 'NURUL MUTMAINNA' }, { nis: '2023323', nama: 'PATIMURA' }, { nis: '2023324', nama: 'RAHMANIA' },
+                { nis: '2023326', nama: 'SALSABILA' }, { nis: '2023332', nama: 'SATRIADI' }
+            ],
+            'IX.2': [
+                { nis: '2023295', nama: 'AISYAH NUR MAULIDYA' }, { nis: '2023297', nama: 'ANDI AHMAD DENI' }, { nis: '2023299', nama: 'AURAH ZAKINA' },
+                { nis: '2024337', nama: 'HAFIZHA TULFALIHA' }, { nis: '2023302', nama: 'HUSNUL MUBARAK' }, { nis: '2023304', nama: 'JUMALIA' },
+                { nis: '2023306', nama: 'MAWAR INDAH LESTARI' }, { nis: '2023310', nama: 'MUHAMMAD ADITYA' }, { nis: '2023311', nama: 'MUHAMMAD DAVID' },
+                { nis: '2023312', nama: 'MUHAMMAD FAUSY' }, { nis: '2023313', nama: 'MUHD.RAFI' }, { nis: '2023314', nama: 'MULYANI SAFITRA' },
+                { nis: '2023318', nama: 'NUR HASNA' }, { nis: '2023320', nama: 'NUR SAHIRA' }, { nis: '2023325', nama: 'RAHMAT HIDAYAT' },
+                { nis: '2023327', nama: 'SASKIA RAMADANI' }, { nis: '2024340', nama: 'MUH. RIZKY' }, { nis: '2024372', nama: 'Muh Fauzan' },
+                { nis: '2024371', nama: 'FITRA RAMADANI' }, { nis: '2024373', nama: 'SISKA' }
+            ]
+        };
+
+        // --- KONFIGURASI ---
+        const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxIyAgf7Wll13WeoCtjOBc7EsUvpftKqGCjObHyLmFepMV39eNPLdL2oTbILba2ycKxlQ/exec';
+        const googleSheetRecapURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ27ncSSFBRM9qe1-Oc4Q4OL2USYZ5-zDgZS7Osyj7Yywv-BRda3ZLekf7fQPH-NO6d5E58hMbn2uuB/pub?gid=0&single=true&output=csv';
+
+        // --- DOM ELEMENTS ---
+        const classSelect = document.getElementById('class-select');
+        const studentListContainer = document.getElementById('student-list-container');
+        const attendanceForm = document.getElementById('attendance-form');
+        const submitButton = document.getElementById('submit-button');
+        const submitText = document.getElementById('submit-text');
+        const submitSpinner = document.getElementById('submit-spinner');
+        const statusMessage = document.getElementById('status-message');
+        const dateInput = document.getElementById('date-input');
+
+        const navAbsen = document.getElementById('nav-absen');
+        const navRekap = document.getElementById('nav-rekap');
+        const viewAbsen = document.getElementById('view-absen');
+        const viewRekap = document.getElementById('view-rekap');
+
+        const recapTableBody = document.getElementById('recap-table-body');
+        const recapLoading = document.getElementById('recap-loading');
+        const filterName = document.getElementById('filter-name');
+        const filterDate = document.getElementById('filter-date');
+        
+        let allRecapData = [];
+
+        // --- FUNGSI JAM & TANGGAL (WITA) ---
+        function updateClock() {
+            const timeDisplay = document.getElementById('time-display');
+            const dateDisplay = document.getElementById('date-display');
+            
+            const now = new Date();
+            const optionsTime = { timeZone: 'Asia/Makassar', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            const optionsDate = { timeZone: 'Asia/Makassar', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+            timeDisplay.textContent = `WITA: ${new Intl.DateTimeFormat('id-ID', optionsTime).format(now)}`;
+            dateDisplay.textContent = new Intl.DateTimeFormat('id-ID', optionsDate).format(now);
+        }
+
+        // --- FUNGSI UTAMA APLIKASI ---
+
+        // Mengisi daftar siswa berdasarkan kelas yang dipilih
+        function populateStudentList() {
+            const selectedClass = classSelect.value;
+            if (!selectedClass) {
+                studentListContainer.innerHTML = '<p class="text-center text-gray-500">Silakan pilih kelas untuk menampilkan daftar siswa.</p>';
+                submitButton.disabled = true;
+                return;
+            }
+
+            const students = studentsData[selectedClass];
+            let tableHTML = `
+                <div class="overflow-x-auto rounded-lg border">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="w-12 px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIS</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Lengkap</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+            `;
+
+            students.forEach((student, index) => {
+                tableHTML += `
+                    <tr class="student-row" data-nis="${student.nis}" data-nama="${student.nama}">
+                        <td class="px-4 py-3 text-center text-sm text-gray-500">${index + 1}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">${student.nis}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${student.nama}</td>
+                        <td class="px-6 py-3 text-sm text-gray-500">
+                            <div class="flex justify-center space-x-2 md:space-x-4">
+                                ${['H', 'S', 'I', 'A'].map(ket => `
+                                    <label class="flex items-center space-x-1 cursor-pointer">
+                                        <input type="radio" name="status-${student.nis}" value="${ket}" class="form-radio h-5 w-5 text-blue-600" ${ket === 'H' ? 'checked' : ''}>
+                                        <span class="font-semibold">${ket}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `</tbody></table></div>`;
+            studentListContainer.innerHTML = tableHTML;
+            submitButton.disabled = false;
+        }
+
+        // Mengirim data absensi ke Google Sheet
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            submitButton.disabled = true;
+            submitText.textContent = 'Mengirim...';
+            submitSpinner.classList.remove('hidden');
+            statusMessage.textContent = '';
+            statusMessage.className = 'mt-4 text-center';
+
+            const studentRows = document.querySelectorAll('.student-row');
+            const promises = [];
+            const failedSubmissions = [];
+
+            const kelas = classSelect.value;
+            const pelajaran = document.getElementById('subject-select').value;
+            const tanggal = dateInput.value;
+
+            studentRows.forEach(row => {
+                const nis = row.dataset.nis;
+                const nama = row.dataset.nama;
+                const keterangan = document.querySelector(`input[name="status-${nis}"]:checked`).value;
+
+                const formData = new FormData();
+                formData.append('NIS', nis);
+                formData.append('Nama Lengkap', nama);
+                formData.append('Tanggal Absen', tanggal);
+                formData.append('Keterangan', keterangan);
+                formData.append('Kelas', kelas);
+                formData.append('Mata Pelajaran', pelajaran);
+                
+                const promise = fetch(googleScriptURL, {
+                    method: 'POST',
+                    body: formData,
+                }).then(response => {
+                    if (!response.ok) {
+                        failedSubmissions.push(nama);
+                    }
+                }).catch(() => {
+                    failedSubmissions.push(nama);
+                });
+
+                promises.push(promise);
+            });
+
+            await Promise.all(promises);
+
+            submitButton.disabled = false;
+            submitText.textContent = 'Simpan Absensi';
+            submitSpinner.classList.add('hidden');
+
+            if (failedSubmissions.length === 0) {
+                statusMessage.textContent = 'Data absensi untuk semua siswa berhasil disimpan!';
+                statusMessage.classList.add('text-green-600', 'font-semibold');
+            } else {
+                statusMessage.textContent = `Gagal menyimpan data untuk: ${failedSubmissions.join(', ')}. Silakan coba lagi.`;
+                statusMessage.classList.add('text-red-600', 'font-semibold');
+            }
+        }
+        
+        // --- FUNGSI REKAPITULASI ---
+
+        function parseCSVRow(rowString) {
+            const result = [];
+            let currentField = '';
+            let inQuotes = false;
+            for (let i = 0; i < rowString.length; i++) {
+                const char = rowString[i];
+                if (char === '"' && (i === 0 || rowString[i-1] === ',')) {
+                    inQuotes = true;
+                    continue;
+                }
+                if (char === '"' && inQuotes) {
+                    inQuotes = false;
+                    continue;
+                }
+                if (char === ',' && !inQuotes) {
+                    result.push(currentField);
+                    currentField = '';
+                } else {
+                    currentField += char;
+                }
+            }
+            result.push(currentField);
+            return result.map(field => field.trim());
+        }
+
+        async function fetchRecapData() {
+            recapLoading.style.display = 'block';
+            recapTableBody.innerHTML = '';
+            document.getElementById('recap-summary').classList.add('hidden'); // Sembunyikan ringkasan saat memuat
+            try {
+                const response = await fetch(`${googleSheetRecapURL}&t=${new Date().getTime()}`);
+                if (!response.ok) {
+                    throw new Error('Gagal mengambil data dari Google Sheet. Pastikan link publish sudah benar.');
+                }
+                const csvText = await response.text();
+                const rows = csvText.trim().split('\n').slice(1).filter(row => row.trim() !== '');
+
+                allRecapData = rows.map(row => {
+                    const columns = parseCSVRow(row);
+                    if (columns.length >= 6) {
+                        return {
+                            nis: columns[0],
+                            nama: columns[1],
+                            tanggal: columns[2],
+                            keterangan: columns[3],
+                            kelas: columns[4],
+                            pelajaran: columns[5].replace(/\r$/, '') 
+                        };
+                    }
+                    return null;
+                }).filter(Boolean);
+                
+                displayRecapData();
+
+            } catch (error) {
+                console.error("Error saat mengambil rekap:", error);
+                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">Error: ${error.message}</td></tr>`;
+            } finally {
+                recapLoading.style.display = 'none';
+            }
+        }
+
+        // Menampilkan dan memfilter data rekap
+        function displayRecapData() {
+            const nameQuery = filterName.value.toLowerCase();
+            const dateQuery = filterDate.value;
+
+            // Filter data utama untuk tabel
+            const filteredData = allRecapData.filter(item => {
+                const nameMatch = item.nama && item.nama.toLowerCase().includes(nameQuery);
+                const dateMatch = dateQuery ? item.tanggal === dateQuery : true;
+                return nameMatch && dateMatch;
+            });
+
+            // PERUBAHAN: Logika untuk menghitung dan menampilkan ringkasan
+            const summaryContainer = document.getElementById('recap-summary');
+            
+            // Logika untuk menampilkan ringkasan hanya jika ada filter nama
+            if (nameQuery.trim() !== '') {
+                // Ambil semua data untuk nama yang cocok, abaikan filter tanggal untuk kalkulasi total
+                 const studentDataForSummary = allRecapData.filter(item => item.nama && item.nama.toLowerCase().includes(nameQuery));
+                 
+                 if (studentDataForSummary.length > 0) {
+                    const firstStudentName = studentDataForSummary[0].nama;
+                    const isSingleStudent = studentDataForSummary.every(item => item.nama === firstStudentName);
+                    
+                    // Hanya tampilkan jika hasil pencarian merujuk ke satu siswa unik
+                    if (isSingleStudent) {
+                        const counts = { H: 0, S: 0, I: 0, A: 0 };
+                        studentDataForSummary.forEach(item => {
+                            const status = item.keterangan.toUpperCase();
+                            if (counts.hasOwnProperty(status)) {
+                                counts[status]++;
+                            }
+                        });
+
+                        document.getElementById('summary-student-name').textContent = firstStudentName;
+                        document.getElementById('summary-hadir').textContent = counts.H;
+                        document.getElementById('summary-sakit').textContent = counts.S;
+                        document.getElementById('summary-izin').textContent = counts.I;
+                        document.getElementById('summary-alfa').textContent = counts.A;
+                        summaryContainer.classList.remove('hidden');
+                    } else {
+                        summaryContainer.classList.add('hidden');
+                    }
+                 } else {
+                    summaryContainer.classList.add('hidden');
+                 }
+            } else {
+                summaryContainer.classList.add('hidden');
+            }
+
+
+            // Tampilkan data yang difilter (termasuk filter tanggal) di tabel
+            recapTableBody.innerHTML = ''; 
+            if (filteredData.length === 0) {
+                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Tidak ada data yang cocok.</td></tr>`;
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const ketClass = {
+                    'H': 'bg-green-100 text-green-800',
+                    'S': 'bg-yellow-100 text-yellow-800',
+                    'I': 'bg-blue-100 text-blue-800',
+                    'A': 'bg-red-100 text-red-800'
+                }[item.keterangan.toUpperCase()] || 'bg-gray-100 text-gray-800';
+
+                const row = `
+                    <tr>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm">${item.nis}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">${item.nama}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm">${item.tanggal}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-center">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${ketClass}">
+                                ${item.keterangan}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm">${item.kelas}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm">${item.pelajaran}</td>
+                    </tr>
+                `;
+                recapTableBody.innerHTML += row;
+            });
+        }
+
+        // --- NAVIGASI ---
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+
+            if (viewId === 'view-absen') {
+                navAbsen.classList.remove('bg-gray-200', 'text-gray-700');
+                navAbsen.classList.add('bg-blue-500', 'text-white');
+                navRekap.classList.remove('bg-blue-500', 'text-white');
+                navRekap.classList.add('bg-gray-200', 'text-gray-700');
+            } else {
+                navRekap.classList.remove('bg-gray-200', 'text-gray-700');
+                navRekap.classList.add('bg-blue-500', 'text-white');
+                navAbsen.classList.remove('bg-blue-500', 'text-white');
+                navAbsen.classList.add('bg-gray-200', 'text-gray-700');
+                fetchRecapData(); // Muat data saat beralih ke rekap
+            }
+        }
+        
+        // --- INISIALISASI & EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set jam dan tanggal
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // Set tanggal default ke hari ini
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            dateInput.value = `${yyyy}-${mm}-${dd}`;
+
+            // Event listeners
+            classSelect.addEventListener('change', populateStudentList);
+            attendanceForm.addEventListener('submit', handleFormSubmit);
+
+            navAbsen.addEventListener('click', () => switchView('view-absen'));
+            navRekap.addEventListener('click', () => switchView('view-rekap'));
+            
+            filterName.addEventListener('input', displayRecapData);
+            filterDate.addEventListener('change', displayRecapData);
+
+            // Inisialisasi view awal
+            switchView('view-absen');
+        });
+
+    </script>
+</body>
+</html>
