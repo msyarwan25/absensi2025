@@ -9,79 +9,227 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <style>
+        /* Base styles for body and fonts */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            background-color: #e2e8f0; /* Lighter blue-gray background */
+            color: #334155; /* Darker text for better contrast */
         }
         .header-title {
             font-family: 'Poppins', sans-serif;
         }
+
+        /* General button styling */
         .btn {
             transition: all 0.3s ease;
+            border-radius: 0.5rem; /* Rounded corners for all buttons */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
         }
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* More pronounced shadow on hover */
         }
+
         /* Custom scrollbar for better aesthetics */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: #f1f5f9; /* Light gray track */
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb {
-            background: #888;
+            background: #94a3b8; /* Medium gray thumb */
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+            background: #64748b; /* Darker gray on hover */
         }
+
         /* Hide and show views */
         .view {
             display: none;
+            animation: fadeIn 0.5s ease-out; /* Fade in animation for views */
         }
         .view.active {
             display: block;
+        }
+
+        /* Fade in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom radio button styling for attendance status */
+        .custom-radio-label {
+            position: relative; /* Needed for absolute positioning of input */
+            display: inline-flex; /* To allow flex properties */
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none; /* Prevent text selection */
+        }
+
+        .custom-radio-label input[type="radio"] {
+            /* Hide the default radio button */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: absolute; /* Position absolutely to hide it but keep it interactive */
+            opacity: 0;
+            width: 100%; /* Make it cover the label for clicks */
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1; /* Ensure it's above the indicator for click events */
+        }
+
+        .custom-radio-label .custom-radio-indicator {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px; /* Increased width to fit full words */
+            height: 36px; /* Consistent height */
+            padding: 0 12px; /* Add horizontal padding */
+            border: 2px solid #cbd5e1; /* Default border color */
+            border-radius: 9999px; /* Full rounded for pill shape */
+            background-color: #f8fafc; /* Default background */
+            font-weight: 600;
+            font-size: 0.875rem; /* text-sm */
+            color: #4b5563; /* Default text color */
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); /* Softer shadow */
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        /* Styles for checked state */
+        .custom-radio-label input[type="radio"]:checked + .custom-radio-indicator {
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* More prominent shadow when checked */
+            transform: scale(1.05); /* Slight scale up when checked */
+        }
+
+        /* Specific colors for each status when checked */
+        .custom-radio-label input[type="radio"][value="Hadir"]:checked + .custom-radio-indicator {
+            background-color: #10b981; /* Emerald green for Hadir */
+        }
+        .custom-radio-label input[type="radio"][value="Sakit"]:checked + .custom-radio-indicator {
+            background-color: #f59e0b; /* Amber yellow for Sakit */
+        }
+        .custom-radio-label input[type="radio"][value="Izin"]:checked + .custom-radio-indicator {
+            background-color: #3b82f6; /* Royal blue for Izin */
+        }
+        .custom-radio-label input[type="radio"][value="Alfa"]:checked + .custom-radio-indicator {
+            background-color: #ef4444; /* Strong red for Alfa */
+        }
+
+        /* Hover effect */
+        .custom-radio-label .custom-radio-indicator:hover {
+            transform: scale(1.08); /* Slightly more scale on hover */
+            border-color: #94a3b8;
+            background-color: #e2e8f0; /* Subtle background change on hover */
+        }
+        .custom-radio-label input[type="radio"]:checked + .custom-radio-indicator:hover {
+            transform: scale(1.1); /* Even more scale for checked on hover */
+            opacity: 0.9;
+        }
+
+        /* Table styling */
+        .table-container {
+            border-radius: 0.75rem; /* More rounded corners for the table container */
+            overflow: hidden; /* Ensures rounded corners clip content */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Stronger shadow for the table */
+        }
+        .min-w-full {
+            width: 100%;
+            border-collapse: separate; /* Allows border-radius on cells */
+            border-spacing: 0; /* Remove space between cells */
+        }
+        .min-w-full th, .min-w-full td {
+            padding: 1rem 1.25rem; /* Increased padding for table cells */
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0; /* Lighter border for rows */
+        }
+        .min-w-full th {
+            background-color: #f1f5f9; /* Light gray header background */
+            font-size: 0.8rem; /* Slightly smaller font for headers */
+            color: #475569; /* Darker gray for header text */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+        .min-w-full tbody tr:last-child td {
+            border-bottom: none; /* No border on the last row */
+        }
+        /* Table row alternating background and hover */
+        #recap-table-body tr:nth-child(odd) {
+            background-color: #ffffff; /* White for odd rows */
+        }
+        #recap-table-body tr:nth-child(even) {
+            background-color: #f8fafc; /* Lighter alternating row */
+        }
+        #recap-table-body tr:hover {
+            background-color: #e0f2fe; /* Light blue on hover */
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        /* Input and select field styling */
+        input[type="text"],
+        input[type="date"],
+        select {
+            border-radius: 0.5rem; /* Consistent rounded corners */
+            padding: 0.65rem 1rem; /* Slightly more padding */
+            border: 1px solid #d1d5db; /* Lighter border */
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); /* Inner shadow for depth */
+        }
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            border-color: #3b82f6; /* Blue focus ring */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Softer focus ring */
+            outline: none;
         }
     </style>
 </head>
 <body class="antialiased text-gray-800">
 
     <div class="min-h-screen container mx-auto p-4 md:p-8">
-        <!-- Header -->
-        <header class="bg-white rounded-xl shadow-md p-6 mb-8">
+        <!-- Header Section -->
+        <header class="bg-white rounded-xl shadow-lg p-6 mb-8 border-b-4 border-blue-500">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div>
-                    <h1 class="header-title text-2xl md:text-3xl font-bold text-blue-600">SMP NEGERI BINUANG</h1>
-                    <p class="text-gray-500">Sistem Absensi Siswa Digital</p>
+                    <h1 class="header-title text-3xl md:text-4xl font-bold text-blue-700">SMP NEGERI BINUANG</h1>
+                    <p class="text-gray-600 text-lg mt-1">Sistem Absensi Siswa Digital</p>
                 </div>
-                <div id="clock" class="text-right mt-4 md:mt-0 bg-gray-100 p-3 rounded-lg">
-                    <p class="font-semibold text-lg" id="time-display"></p>
+                <div id="clock" class="text-right mt-4 md:mt-0 bg-blue-50 p-3 rounded-lg shadow-inner">
+                    <p class="font-semibold text-xl text-blue-800" id="time-display"></p>
                     <p class="text-sm text-gray-600" id="date-display"></p>
                 </div>
             </div>
-            <nav class="mt-6 border-t pt-4 flex space-x-2">
-                <button id="nav-absen" class="btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-sm">
+            <!-- Navigation Buttons -->
+            <nav class="mt-8 border-t pt-6 flex flex-wrap gap-4 justify-center md:justify-start">
+                <button id="nav-absen" class="btn bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 shadow-md">
                     Input Absensi
                 </button>
-                <button id="nav-rekap" class="btn bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-lg">
+                <button id="nav-rekap" class="btn bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6">
                     Rekap Absensi
                 </button>
             </nav>
         </header>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <main>
-            <!-- Absensi View -->
+            <!-- Absensi View (Default Active) -->
             <div id="view-absen" class="view active">
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h2 class="text-xl font-bold mb-4 border-b pb-2">Formulir Absensi Siswa</h2>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-200 text-blue-700">Formulir Absensi Siswa</h2>
                     <form id="attendance-form">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                             <div>
-                                <label for="class-select" class="block text-sm font-medium text-gray-700 mb-1">Pilih Kelas</label>
-                                <select id="class-select" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <label for="class-select" class="block text-sm font-medium text-gray-700 mb-2">Pilih Kelas</label>
+                                <select id="class-select" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                     <option value="">-- Pilih Kelas --</option>
                                     <option value="VII.1">VII.1</option>
                                     <option value="VII.2">VII.2</option>
@@ -92,24 +240,32 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="subject-select" class="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran</label>
-                                <select id="subject-select" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <label for="subject-select" class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
+                                <select id="subject-select" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                     <option>IPA</option>
                                     <option>INFORMATIKA</option>
+                                    <option>MATEMATIKA</option>
+                                    <option>BAHASA INDONESIA</option>
+                                    <option>BAHASA INGGRIS</option>
+                                    <option>PENDIDIKAN AGAMA</option>
+                                    <option>PJOK</option>
+                                    <option>SENI BUDAYA</option>
+                                    <option>IPS</option>
+                                    <option>PPKN</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="date-input" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                                <input type="date" id="date-input" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <label for="date-input" class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                                <input type="date" id="date-input" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                             </div>
                         </div>
 
-                        <div id="student-list-container" class="mt-6">
-                            <p class="text-center text-gray-500">Silakan pilih kelas untuk menampilkan daftar siswa.</p>
+                        <div id="student-list-container" class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <p class="text-center text-gray-500 py-4">Silakan pilih kelas untuk menampilkan daftar siswa.</p>
                         </div>
                         
-                        <div class="mt-8 flex justify-end">
-                            <button type="submit" id="submit-button" class="btn bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg flex items-center" disabled>
+                        <div class="mt-10 flex justify-end">
+                            <button type="submit" id="submit-button" class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 px-8 shadow-xl flex items-center">
                                 <svg id="submit-icon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <span id="submit-text">Simpan Absensi</span>
                                 <svg id="submit-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -119,51 +275,86 @@
                             </button>
                         </div>
                     </form>
-                    <div id="status-message" class="mt-4 text-center"></div>
+                    <div id="status-message" class="mt-6 text-center text-lg"></div>
                 </div>
             </div>
 
             <!-- Rekap View -->
             <div id="view-rekap" class="view">
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <h2 class="text-xl font-bold mb-4 border-b pb-2">Rekapitulasi Absensi</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-200 text-blue-700">Rekapitulasi Absensi</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                         <div>
-                            <label for="filter-name" class="block text-sm font-medium text-gray-700 mb-1">Filter Nama Siswa</label>
-                            <input type="text" id="filter-name" placeholder="Ketik nama untuk mencari..." class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <label for="filter-class" class="block text-sm font-medium text-gray-700 mb-2">Filter Kelas</label>
+                            <select id="filter-class" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">-- Semua Kelas --</option>
+                                <option value="VII.1">VII.1</option>
+                                <option value="VII.2">VII.2</option>
+                                <option value="VIII.1">VIII.1</option>
+                                <option value="VIII.2">VIII.2</option>
+                                <option value="IX.1">IX.1</option>
+                                <option value="IX.2">IX.2</option>
+                            </select>
                         </div>
                         <div>
-                            <label for="filter-date" class="block text-sm font-medium text-gray-700 mb-1">Filter Tanggal</label>
-                            <input type="date" id="filter-date" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            <label for="filter-subject" class="block text-sm font-medium text-gray-700 mb-2">Filter Mata Pelajaran</label>
+                            <select id="filter-subject" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">-- Semua Mata Pelajaran --</option>
+                                <option>IPA</option>
+                                <option>INFORMATIKA</option>
+                                <option>MATEMATIKA</option>
+                                <option>BAHASA INDONESIA</option>
+                                <option>BAHASA INGGRIS</option>
+                                <option>PENDIDIKAN AGAMA</option>
+                                <option>PJOK</option>
+                                <option>SENI BUDAYA</option>
+                                <option>IPS</option>
+                                <option>PPKN</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="filter-name" class="block text-sm font-medium text-gray-700 mb-2">Filter Nama Siswa</label>
+                            <input type="text" id="filter-name" placeholder="Ketik nama untuk mencari..." class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div class="md:col-span-1 lg:col-span-1">
+                            <label for="filter-date" class="block text-sm font-medium text-gray-700 mb-2">Filter Tanggal</label>
+                            <input type="date" id="filter-date" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                     </div>
                     
-                    <!-- FITUR BARU: Ringkasan per siswa -->
-                    <div id="recap-summary" class="hidden mb-6 bg-blue-50 border border-blue-200 p-4 rounded-lg transition-all duration-300">
-                        <h3 class="text-lg font-bold text-blue-800 mb-3">Ringkasan untuk: <span id="summary-student-name" class="text-blue-900"></span></h3>
+                    <!-- Student/Class summary section -->
+                    <div id="recap-summary" class="hidden mb-6 bg-blue-100 border border-blue-300 p-5 rounded-lg shadow-md transition-all duration-500 ease-in-out">
+                        <h3 class="text-xl font-bold text-blue-800 mb-4"><span id="summary-title">Ringkasan</span>: <span id="summary-target-name" class="text-blue-900"></span></h3>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                            <div class="bg-green-100 p-3 rounded-lg shadow-sm">
-                                <p class="text-2xl font-bold text-green-800" id="summary-hadir">0</p>
-                                <p class="text-sm font-medium text-green-700">Hadir</p>
+                            <div class="bg-green-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
+                                <p class="text-3xl font-bold text-green-800" id="summary-hadir">0</p>
+                                <p class="text-base font-medium text-green-700 mt-1">Hadir</p>
                             </div>
-                            <div class="bg-yellow-100 p-3 rounded-lg shadow-sm">
-                                <p class="text-2xl font-bold text-yellow-800" id="summary-sakit">0</p>
-                                <p class="text-sm font-medium text-yellow-700">Sakit</p>
+                            <div class="bg-yellow-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
+                                <p class="text-3xl font-bold text-yellow-800" id="summary-sakit">0</p>
+                                <p class="text-base font-medium text-yellow-700 mt-1">Sakit</p>
                             </div>
-                            <div class="bg-blue-100 p-3 rounded-lg shadow-sm">
-                                <p class="text-2xl font-bold text-blue-800" id="summary-izin">0</p>
-                                <p class="text-sm font-medium text-blue-700">Izin</p>
+                            <div class="bg-blue-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
+                                <p class="text-3xl font-bold text-blue-800" id="summary-izin">0</p>
+                                <p class="text-base font-medium text-blue-700 mt-1">Izin</p>
                             </div>
-                            <div class="bg-red-100 p-3 rounded-lg shadow-sm">
-                                <p class="text-2xl font-bold text-red-800" id="summary-alfa">0</p>
-                                <p class="text-sm font-medium text-red-700">Alfa</p>
+                            <div class="bg-red-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
+                                <p class="text-3xl font-bold text-red-800" id="summary-alfa">0</p>
+                                <p class="text-base font-medium text-red-700 mt-1">Alfa</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto">
+                    <div class="flex justify-end mb-4">
+                        <a href="https://docs.google.com/spreadsheets/d/145HIPY1JPtt7KLaXvvfJ6Z6D669zxhmStpbNc-5u1sw/edit?gid=0#gid=0" target="_blank" class="btn bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 px-6 shadow-md flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            Lihat Data Mentah (Google Sheet)
+                        </a>
+                    </div>
+
+                    <div class="overflow-x-auto table-container">
                         <table class="min-w-full bg-white">
-                            <thead class="bg-gray-100">
+                            <thead>
                                 <tr>
                                     <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">NIS</th>
                                     <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Lengkap</th>
@@ -187,7 +378,7 @@
     </div>
 
     <script>
-        // --- DATA SISWA ---
+        // --- STUDENT DATA ---
         const studentsData = {
             'VII.1': [
                 { nis: '1', nama: 'AURA IDRIS' }, { nis: '2', nama: 'AHMAD FAUZAN' }, { nis: '3', nama: 'AHMAD HIDAYAT' },
@@ -248,6 +439,8 @@
         // --- KONFIGURASI ---
         const googleScriptURL = 'https://script.google.com/macros/s/AKfycbxIyAgf7Wll13WeoCtjOBc7EsUvpftKqGCjObHyLmFepMV39eNPLdL2oTbILba2ycKxlQ/exec';
         const googleSheetRecapURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ27ncSSFBRM9qe1-Oc4Q4OL2USYZ5-zDgZS7Osyj7Yywv-BRda3ZLekf7fQPH-NO6d5E58hMbn2uuB/pub?gid=0&single=true&output=csv';
+        // URL for the raw Google Sheet data
+        const rawGoogleSheetURL = 'https://docs.google.com/spreadsheets/d/145HIPY1JPtt7KLaXvvfJ6Z6D669zxhmStpbNc-5u1sw/edit?gid=0#gid=0';
 
         // --- DOM ELEMENTS ---
         const classSelect = document.getElementById('class-select');
@@ -266,12 +459,18 @@
 
         const recapTableBody = document.getElementById('recap-table-body');
         const recapLoading = document.getElementById('recap-loading');
+        const filterClass = document.getElementById('filter-class');
+        const filterSubject = document.getElementById('filter-subject');
         const filterName = document.getElementById('filter-name');
         const filterDate = document.getElementById('filter-date');
         
         let allRecapData = [];
 
         // --- FUNGSI JAM & TANGGAL (WITA) ---
+        /**
+         * Updates the clock and date display in the header.
+         * Displays time in WITA (Central Indonesia Time).
+         */
         function updateClock() {
             const timeDisplay = document.getElementById('time-display');
             const dateDisplay = document.getElementById('date-display');
@@ -286,42 +485,48 @@
 
         // --- FUNGSI UTAMA APLIKASI ---
 
-        // Mengisi daftar siswa berdasarkan kelas yang dipilih
+        /**
+         * Populates the student list table based on the selected class.
+         * Enables/disables the submit button accordingly.
+         */
         function populateStudentList() {
             const selectedClass = classSelect.value;
             if (!selectedClass) {
-                studentListContainer.innerHTML = '<p class="text-center text-gray-500">Silakan pilih kelas untuk menampilkan daftar siswa.</p>';
+                studentListContainer.innerHTML = '<p class="text-center text-gray-500 py-4">Silakan pilih kelas untuk menampilkan daftar siswa.</p>';
                 submitButton.disabled = true;
                 return;
             }
 
             const students = studentsData[selectedClass];
+            // Map single-letter status codes to full words for display
+            const statusMap = { 'H': 'Hadir', 'S': 'Sakit', 'I': 'Izin', 'A': 'Alfa' };
+
             let tableHTML = `
-                <div class="overflow-x-auto rounded-lg border">
+                <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
                     <table class="min-w-full bg-white">
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th class="w-12 px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIS</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Lengkap</th>
-                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                <th class="w-12 px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">No</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">NIS</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Nama Lengkap</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Keterangan</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200">
+                        <tbody class="divide-y divide-gray-100">
             `;
 
             students.forEach((student, index) => {
                 tableHTML += `
                     <tr class="student-row" data-nis="${student.nis}" data-nama="${student.nama}">
-                        <td class="px-4 py-3 text-center text-sm text-gray-500">${index + 1}</td>
+                        <td class="px-4 py-3 text-center text-sm text-gray-600">${index + 1}</td>
                         <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">${student.nis}</td>
                         <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${student.nama}</td>
-                        <td class="px-6 py-3 text-sm text-gray-500">
+                        <td class="px-6 py-3 text-sm text-gray-600">
                             <div class="flex justify-center space-x-2 md:space-x-4">
-                                ${['H', 'S', 'I', 'A'].map(ket => `
-                                    <label class="flex items-center space-x-1 cursor-pointer">
-                                        <input type="radio" name="status-${student.nis}" value="${ket}" class="form-radio h-5 w-5 text-blue-600" ${ket === 'H' ? 'checked' : ''}>
-                                        <span class="font-semibold">${ket}</span>
+                                ${['Hadir', 'Sakit', 'Izin', 'Alfa'].map(fullKet => `
+                                    <label class="custom-radio-label flex items-center space-x-1 cursor-pointer">
+                                        <input type="radio" name="status-${student.nis}" value="${fullKet}" ${fullKet === 'Hadir' ? 'checked' : ''}>
+                                        <span class="custom-radio-indicator">${fullKet}</span>
                                     </label>
                                 `).join('')}
                             </div>
@@ -335,7 +540,11 @@
             submitButton.disabled = false;
         }
 
-        // Mengirim data absensi ke Google Sheet
+        /**
+         * Handles the submission of attendance data to Google Sheet.
+         * Shows loading state and provides feedback messages.
+         * @param {Event} e - The form submission event.
+         */
         async function handleFormSubmit(e) {
             e.preventDefault();
             
@@ -343,7 +552,7 @@
             submitText.textContent = 'Mengirim...';
             submitSpinner.classList.remove('hidden');
             statusMessage.textContent = '';
-            statusMessage.className = 'mt-4 text-center';
+            statusMessage.className = 'mt-6 text-center text-lg';
 
             const studentRows = document.querySelectorAll('.student-row');
             const promises = [];
@@ -353,16 +562,26 @@
             const pelajaran = document.getElementById('subject-select').value;
             const tanggal = dateInput.value;
 
+            if (!tanggal) {
+                statusMessage.textContent = 'Harap pilih tanggal absensi.';
+                statusMessage.classList.add('text-red-600', 'font-semibold');
+                submitButton.disabled = false;
+                submitText.textContent = 'Simpan Absensi';
+                submitSpinner.classList.add('hidden');
+                return;
+            }
+
             studentRows.forEach(row => {
                 const nis = row.dataset.nis;
                 const nama = row.dataset.nama;
+                // Get the full word for keterangan
                 const keterangan = document.querySelector(`input[name="status-${nis}"]:checked`).value;
 
                 const formData = new FormData();
                 formData.append('NIS', nis);
                 formData.append('Nama Lengkap', nama);
                 formData.append('Tanggal Absen', tanggal);
-                formData.append('Keterangan', keterangan);
+                formData.append('Keterangan', keterangan); // Send the full word
                 formData.append('Kelas', kelas);
                 formData.append('Mata Pelajaran', pelajaran);
                 
@@ -373,7 +592,8 @@
                     if (!response.ok) {
                         failedSubmissions.push(nama);
                     }
-                }).catch(() => {
+                }).catch(error => {
+                    console.error(`Error submitting data for ${nama}:`, error);
                     failedSubmissions.push(nama);
                 });
 
@@ -397,35 +617,40 @@
         
         // --- FUNGSI REKAPITULASI ---
 
+        /**
+         * Custom CSV parser to handle quoted fields and commas within fields.
+         * @param {string} rowString - The raw CSV row string.
+         * @returns {Array<string>} An array of parsed field values.
+         */
         function parseCSVRow(rowString) {
             const result = [];
             let currentField = '';
             let inQuotes = false;
             for (let i = 0; i < rowString.length; i++) {
                 const char = rowString[i];
-                if (char === '"' && (i === 0 || rowString[i-1] === ',')) {
-                    inQuotes = true;
-                    continue;
-                }
-                if (char === '"' && inQuotes) {
-                    inQuotes = false;
+                if (char === '"' && (i === 0 || rowString[i-1] === ',' || rowString[i-1] === ' ')) {
+                    inQuotes = !inQuotes;
                     continue;
                 }
                 if (char === ',' && !inQuotes) {
-                    result.push(currentField);
+                    result.push(currentField.trim());
                     currentField = '';
                 } else {
                     currentField += char;
                 }
             }
-            result.push(currentField);
-            return result.map(field => field.trim());
+            result.push(currentField.trim());
+            return result;
         }
 
+        /**
+         * Fetches attendance recap data from the published Google Sheet (CSV format).
+         * Updates the global `allRecapData` array.
+         */
         async function fetchRecapData() {
             recapLoading.style.display = 'block';
             recapTableBody.innerHTML = '';
-            document.getElementById('recap-summary').classList.add('hidden'); // Sembunyikan ringkasan saat memuat
+            document.getElementById('recap-summary').classList.add('hidden');
             try {
                 const response = await fetch(`${googleSheetRecapURL}&t=${new Date().getTime()}`);
                 if (!response.ok) {
@@ -443,74 +668,113 @@
                             tanggal: columns[2],
                             keterangan: columns[3],
                             kelas: columns[4],
-                            pelajaran: columns[5].replace(/\r$/, '') 
+                            pelajaran: columns[5]
                         };
                     }
                     return null;
                 }).filter(Boolean);
-                
-                displayRecapData();
 
+                displayRecapData();
             } catch (error) {
                 console.error("Error saat mengambil rekap:", error);
-                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">Error: ${error.message}</td></tr>`;
+                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">Error: ${error.message}<br>Pastikan Google Sheet sudah dipublikasikan ke web sebagai CSV.</td></tr>`;
             } finally {
                 recapLoading.style.display = 'none';
             }
         }
 
-        // Menampilkan dan memfilter data rekap
+        /**
+         * Displays and filters the recap data in the table.
+         * Also calculates and displays the summary for a single student or an entire class.
+         */
         function displayRecapData() {
+            const classQuery = filterClass.value;
+            const subjectQuery = filterSubject.value;
             const nameQuery = filterName.value.toLowerCase();
             const dateQuery = filterDate.value;
 
-            // Filter data utama untuk tabel
             const filteredData = allRecapData.filter(item => {
+                const classMatch = classQuery ? item.kelas === classQuery : true;
+                const subjectMatch = subjectQuery ? item.pelajaran === subjectQuery : true;
                 const nameMatch = item.nama && item.nama.toLowerCase().includes(nameQuery);
                 const dateMatch = dateQuery ? item.tanggal === dateQuery : true;
-                return nameMatch && dateMatch;
+                return classMatch && subjectMatch && nameMatch && dateMatch;
             });
 
-            // PERUBAHAN: Logika untuk menghitung dan menampilkan ringkasan
             const summaryContainer = document.getElementById('recap-summary');
+            const summaryTitle = document.getElementById('summary-title');
+            const summaryTargetName = document.getElementById('summary-target-name');
             
-            // Logika untuk menampilkan ringkasan hanya jika ada filter nama
             if (nameQuery.trim() !== '') {
-                // Ambil semua data untuk nama yang cocok, abaikan filter tanggal untuk kalkulasi total
-                 const studentDataForSummary = allRecapData.filter(item => item.nama && item.nama.toLowerCase().includes(nameQuery));
-                 
-                 if (studentDataForSummary.length > 0) {
+                const studentDataForSummary = allRecapData.filter(item => 
+                    item.nama && item.nama.toLowerCase().includes(nameQuery) && 
+                    (classQuery ? item.kelas === classQuery : true) &&
+                    (subjectQuery ? item.pelajaran === subjectQuery : true)
+                );
+                
+                if (studentDataForSummary.length > 0) {
                     const firstStudentName = studentDataForSummary[0].nama;
                     const isSingleStudent = studentDataForSummary.every(item => item.nama === firstStudentName);
                     
-                    // Hanya tampilkan jika hasil pencarian merujuk ke satu siswa unik
                     if (isSingleStudent) {
-                        const counts = { H: 0, S: 0, I: 0, A: 0 };
+                        const counts = { 'Hadir': 0, 'Sakit': 0, 'Izin': 0, 'Alfa': 0 }; // Use full words
                         studentDataForSummary.forEach(item => {
-                            const status = item.keterangan.toUpperCase();
+                            const status = item.keterangan; // Already full word from Google Sheet
                             if (counts.hasOwnProperty(status)) {
                                 counts[status]++;
                             }
                         });
 
-                        document.getElementById('summary-student-name').textContent = firstStudentName;
-                        document.getElementById('summary-hadir').textContent = counts.H;
-                        document.getElementById('summary-sakit').textContent = counts.S;
-                        document.getElementById('summary-izin').textContent = counts.I;
-                        document.getElementById('summary-alfa').textContent = counts.A;
+                        summaryTitle.textContent = 'Ringkasan untuk';
+                        summaryTargetName.textContent = firstStudentName;
+                        document.getElementById('summary-hadir').textContent = counts['Hadir'];
+                        document.getElementById('summary-sakit').textContent = counts['Sakit'];
+                        document.getElementById('summary-izin').textContent = counts['Izin'];
+                        document.getElementById('summary-alfa').textContent = counts['Alfa'];
                         summaryContainer.classList.remove('hidden');
                     } else {
                         summaryContainer.classList.add('hidden');
                     }
-                 } else {
+                } else {
                     summaryContainer.classList.add('hidden');
-                 }
+                }
+            } else if (classQuery.trim() !== '' || subjectQuery.trim() !== '') {
+                const groupDataForSummary = allRecapData.filter(item => 
+                    (classQuery ? item.kelas === classQuery : true) &&
+                    (subjectQuery ? item.pelajaran === subjectQuery : true)
+                );
+                
+                if (groupDataForSummary.length > 0) {
+                    const counts = { 'Hadir': 0, 'Sakit': 0, 'Izin': 0, 'Alfa': 0 }; // Use full words
+                    groupDataForSummary.forEach(item => {
+                        const status = item.keterangan; // Already full word
+                        if (counts.hasOwnProperty(status)) {
+                            counts[status]++;
+                        }
+                    });
+                    summaryTitle.textContent = 'Ringkasan';
+                    summaryTargetName.textContent = '';
+                    if (classQuery && subjectQuery) {
+                        summaryTargetName.textContent = `Kelas ${classQuery} - ${subjectQuery}`;
+                    } else if (classQuery) {
+                        summaryTargetName.textContent = `Kelas ${classQuery}`;
+                    } else if (subjectQuery) {
+                        summaryTargetName.textContent = `Mata Pelajaran ${subjectQuery}`;
+                    }
+                    
+                    document.getElementById('summary-hadir').textContent = counts['Hadir'];
+                    document.getElementById('summary-sakit').textContent = counts['Sakit'];
+                    document.getElementById('summary-izin').textContent = counts['Izin'];
+                    document.getElementById('summary-alfa').textContent = counts['Alfa'];
+                    summaryContainer.classList.remove('hidden');
+                } else {
+                    summaryContainer.classList.add('hidden');
+                }
             } else {
                 summaryContainer.classList.add('hidden');
             }
 
 
-            // Tampilkan data yang difilter (termasuk filter tanggal) di tabel
             recapTableBody.innerHTML = ''; 
             if (filteredData.length === 0) {
                 recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Tidak ada data yang cocok.</td></tr>`;
@@ -518,12 +782,13 @@
             }
 
             filteredData.forEach(item => {
+                // Map full word status to appropriate Tailwind CSS classes
                 const ketClass = {
-                    'H': 'bg-green-100 text-green-800',
-                    'S': 'bg-yellow-100 text-yellow-800',
-                    'I': 'bg-blue-100 text-blue-800',
-                    'A': 'bg-red-100 text-red-800'
-                }[item.keterangan.toUpperCase()] || 'bg-gray-100 text-gray-800';
+                    'Hadir': 'bg-green-100 text-green-800',
+                    'Sakit': 'bg-yellow-100 text-yellow-800',
+                    'Izin': 'bg-blue-100 text-blue-800',
+                    'Alfa': 'bg-red-100 text-red-800'
+                }[item.keterangan] || 'bg-gray-100 text-gray-800';
 
                 const row = `
                     <tr>
@@ -544,51 +809,53 @@
         }
 
         // --- NAVIGASI ---
+        /**
+         * Switches the active view between 'Input Absensi' and 'Rekap Absensi'.
+         * Updates navigation button styles and fetches recap data if switching to recap view.
+         * @param {string} viewId - The ID of the view to activate ('view-absen' or 'view-rekap').
+         */
         function switchView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
 
             if (viewId === 'view-absen') {
-                navAbsen.classList.remove('bg-gray-200', 'text-gray-700');
-                navAbsen.classList.add('bg-blue-500', 'text-white');
-                navRekap.classList.remove('bg-blue-500', 'text-white');
-                navRekap.classList.add('bg-gray-200', 'text-gray-700');
-            } else {
-                navRekap.classList.remove('bg-gray-200', 'text-gray-700');
-                navRekap.classList.add('bg-blue-500', 'text-white');
-                navAbsen.classList.remove('bg-blue-500', 'text-white');
-                navAbsen.classList.add('bg-gray-200', 'text-gray-700');
-                fetchRecapData(); // Muat data saat beralih ke rekap
+                navAbsen.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
+                navAbsen.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
+                navRekap.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
+                navRekap.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
+            } else if (viewId === 'view-rekap') {
+                navRekap.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
+                navRekap.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
+                navAbsen.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
+                navAbsen.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
+                fetchRecapData();
             }
         }
-        
-        // --- INISIALISASI & EVENT LISTENERS ---
+
+        // --- EVENT LISTENERS ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Set jam dan tanggal
             updateClock();
             setInterval(updateClock, 1000);
 
-            // Set tanggal default ke hari ini
             const today = new Date();
             const yyyy = today.getFullYear();
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const dd = String(today.getDate()).padStart(2, '0');
             dateInput.value = `${yyyy}-${mm}-${dd}`;
 
-            // Event listeners
             classSelect.addEventListener('change', populateStudentList);
             attendanceForm.addEventListener('submit', handleFormSubmit);
 
             navAbsen.addEventListener('click', () => switchView('view-absen'));
             navRekap.addEventListener('click', () => switchView('view-rekap'));
-            
+
+            filterClass.addEventListener('change', displayRecapData);
+            filterSubject.addEventListener('change', displayRecapData);
             filterName.addEventListener('input', displayRecapData);
             filterDate.addEventListener('change', displayRecapData);
 
-            // Inisialisasi view awal
-            switchView('view-absen');
+            populateStudentList();
         });
-
     </script>
 </body>
 </html>
