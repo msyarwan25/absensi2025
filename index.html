@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,14 +8,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
     <style>
         /* Base styles for body and fonts */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #e2e8f0; /* Lighter blue-gray background */
-            color: #334155; /* Darker text for better contrast */
+            background-color: #e2e8f0;
+            /* Lighter blue-gray background */
+            color: #334155;
+            /* Darker text for better contrast */
         }
+
         .header-title {
             font-family: 'Poppins', sans-serif;
         }
@@ -22,53 +28,75 @@
         /* General button styling */
         .btn {
             transition: all 0.3s ease;
-            border-radius: 0.5rem; /* Rounded corners for all buttons */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
+            border-radius: 0.5rem;
+            /* Rounded corners for all buttons */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow */
         }
+
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* More pronounced shadow on hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            /* More pronounced shadow on hover */
         }
 
         /* Custom scrollbar for better aesthetics */
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-track {
-            background: #f1f5f9; /* Light gray track */
+            background: #f1f5f9;
+            /* Light gray track */
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb {
-            background: #94a3b8; /* Medium gray thumb */
+            background: #94a3b8;
+            /* Medium gray thumb */
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
-            background: #64748b; /* Darker gray on hover */
+            background: #64748b;
+            /* Darker gray on hover */
         }
 
         /* Hide and show views */
         .view {
             display: none;
-            animation: fadeIn 0.5s ease-out; /* Fade in animation for views */
+            animation: fadeIn 0.5s ease-out;
+            /* Fade in animation for views */
         }
+
         .view.active {
             display: block;
         }
 
         /* Fade in animation */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Custom radio button styling for attendance status */
         .custom-radio-label {
-            position: relative; /* Needed for absolute positioning of input */
-            display: inline-flex; /* To allow flex properties */
+            position: relative;
+            /* Needed for absolute positioning of input */
+            display: inline-flex;
+            /* To allow flex properties */
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            user-select: none; /* Prevent text selection */
+            user-select: none;
+            /* Prevent text selection */
         }
 
         .custom-radio-label input[type="radio"] {
@@ -76,102 +104,150 @@
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            position: absolute; /* Position absolutely to hide it but keep it interactive */
+            position: absolute;
+            /* Position absolutely to hide it but keep it interactive */
             opacity: 0;
-            width: 100%; /* Make it cover the label for clicks */
+            width: 100%;
+            /* Make it cover the label for clicks */
             height: 100%;
             top: 0;
             left: 0;
-            z-index: 1; /* Ensure it's above the indicator for click events */
+            z-index: 1;
+            /* Ensure it's above the indicator for click events */
         }
 
         .custom-radio-label .custom-radio-indicator {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 60px; /* Increased width to fit full words */
-            height: 36px; /* Consistent height */
-            padding: 0 12px; /* Add horizontal padding */
-            border: 2px solid #cbd5e1; /* Default border color */
-            border-radius: 9999px; /* Full rounded for pill shape */
-            background-color: #f8fafc; /* Default background */
+            min-width: 60px;
+            /* Increased width to fit full words */
+            height: 36px;
+            /* Consistent height */
+            padding: 0 12px;
+            /* Add horizontal padding */
+            border: 2px solid #cbd5e1;
+            /* Default border color */
+            border-radius: 9999px;
+            /* Full rounded for pill shape */
+            background-color: #f8fafc;
+            /* Default background */
             font-weight: 600;
-            font-size: 0.875rem; /* text-sm */
-            color: #4b5563; /* Default text color */
+            font-size: 0.875rem;
+            /* text-sm */
+            color: #4b5563;
+            /* Default text color */
             transition: all 0.2s ease-in-out;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08); /* Softer shadow */
-            white-space: nowrap; /* Prevent text wrapping */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            /* Softer shadow */
+            white-space: nowrap;
+            /* Prevent text wrapping */
         }
 
         /* Styles for checked state */
-        .custom-radio-label input[type="radio"]:checked + .custom-radio-indicator {
+        .custom-radio-label input[type="radio"]:checked+.custom-radio-indicator {
             color: white;
             border-color: transparent;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* More prominent shadow when checked */
-            transform: scale(1.05); /* Slight scale up when checked */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            /* More prominent shadow when checked */
+            transform: scale(1.05);
+            /* Slight scale up when checked */
         }
 
         /* Specific colors for each status when checked */
-        .custom-radio-label input[type="radio"][value="Hadir"]:checked + .custom-radio-indicator {
-            background-color: #10b981; /* Emerald green for Hadir */
+        .custom-radio-label input[type="radio"][value="Hadir"]:checked+.custom-radio-indicator {
+            background-color: #10b981;
+            /* Emerald green for Hadir */
         }
-        .custom-radio-label input[type="radio"][value="Sakit"]:checked + .custom-radio-indicator {
-            background-color: #f59e0b; /* Amber yellow for Sakit */
+
+        .custom-radio-label input[type="radio"][value="Sakit"]:checked+.custom-radio-indicator {
+            background-color: #f59e0b;
+            /* Amber yellow for Sakit */
         }
-        .custom-radio-label input[type="radio"][value="Izin"]:checked + .custom-radio-indicator {
-            background-color: #3b82f6; /* Royal blue for Izin */
+
+        .custom-radio-label input[type="radio"][value="Izin"]:checked+.custom-radio-indicator {
+            background-color: #3b82f6;
+            /* Royal blue for Izin */
         }
-        .custom-radio-label input[type="radio"][value="Alfa"]:checked + .custom-radio-indicator {
-            background-color: #ef4444; /* Strong red for Alfa */
+
+        .custom-radio-label input[type="radio"][value="Alfa"]:checked+.custom-radio-indicator {
+            background-color: #ef4444;
+            /* Strong red for Alfa */
         }
 
         /* Hover effect */
         .custom-radio-label .custom-radio-indicator:hover {
-            transform: scale(1.08); /* Slightly more scale on hover */
+            transform: scale(1.08);
+            /* Slightly more scale on hover */
             border-color: #94a3b8;
-            background-color: #e2e8f0; /* Subtle background change on hover */
+            background-color: #e2e8f0;
+            /* Subtle background change on hover */
         }
-        .custom-radio-label input[type="radio"]:checked + .custom-radio-indicator:hover {
-            transform: scale(1.1); /* Even more scale for checked on hover */
+
+        .custom-radio-label input[type="radio"]:checked+.custom-radio-indicator:hover {
+            transform: scale(1.1);
+            /* Even more scale for checked on hover */
             opacity: 0.9;
         }
 
         /* Table styling */
         .table-container {
-            border-radius: 0.75rem; /* More rounded corners for the table container */
-            overflow: hidden; /* Ensures rounded corners clip content */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Stronger shadow for the table */
+            border-radius: 0.75rem;
+            /* More rounded corners for the table container */
+            overflow: hidden;
+            /* Ensures rounded corners clip content */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            /* Stronger shadow for the table */
         }
+
         .min-w-full {
             width: 100%;
-            border-collapse: separate; /* Allows border-radius on cells */
-            border-spacing: 0; /* Remove space between cells */
+            border-collapse: separate;
+            /* Allows border-radius on cells */
+            border-spacing: 0;
+            /* Remove space between cells */
         }
-        .min-w-full th, .min-w-full td {
-            padding: 1rem 1.25rem; /* Increased padding for table cells */
+
+        .min-w-full th,
+        .min-w-full td {
+            padding: 1rem 1.25rem;
+            /* Increased padding for table cells */
             text-align: left;
-            border-bottom: 1px solid #e2e8f0; /* Lighter border for rows */
+            border-bottom: 1px solid #e2e8f0;
+            /* Lighter border for rows */
         }
+
         .min-w-full th {
-            background-color: #f1f5f9; /* Light gray header background */
-            font-size: 0.8rem; /* Slightly smaller font for headers */
-            color: #475569; /* Darker gray for header text */
+            background-color: #f1f5f9;
+            /* Light gray header background */
+            font-size: 0.8rem;
+            /* Slightly smaller font for headers */
+            color: #475569;
+            /* Darker gray for header text */
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-weight: 700;
         }
+
         .min-w-full tbody tr:last-child td {
-            border-bottom: none; /* No border on the last row */
+            border-bottom: none;
+            /* No border on the last row */
         }
+
         /* Table row alternating background and hover */
         #recap-table-body tr:nth-child(odd) {
-            background-color: #ffffff; /* White for odd rows */
+            background-color: #ffffff;
+            /* White for odd rows */
         }
+
         #recap-table-body tr:nth-child(even) {
-            background-color: #f8fafc; /* Lighter alternating row */
+            background-color: #f8fafc;
+            /* Lighter alternating row */
         }
+
         #recap-table-body tr:hover {
-            background-color: #e0f2fe; /* Light blue on hover */
+            background-color: #e0f2fe;
+            /* Light blue on hover */
             transition: background-color 0.2s ease-in-out;
         }
 
@@ -179,20 +255,28 @@
         input[type="text"],
         input[type="date"],
         select {
-            border-radius: 0.5rem; /* Consistent rounded corners */
-            padding: 0.65rem 1rem; /* Slightly more padding */
-            border: 1px solid #d1d5db; /* Lighter border */
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); /* Inner shadow for depth */
+            border-radius: 0.5rem;
+            /* Consistent rounded corners */
+            padding: 0.65rem 1rem;
+            /* Slightly more padding */
+            border: 1px solid #d1d5db;
+            /* Lighter border */
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+            /* Inner shadow for depth */
         }
+
         input[type="text"]:focus,
         input[type="date"]:focus,
         select:focus {
-            border-color: #3b82f6; /* Blue focus ring */
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Softer focus ring */
+            border-color: #3b82f6;
+            /* Blue focus ring */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+            /* Softer focus ring */
             outline: none;
         }
     </style>
 </head>
+
 <body class="antialiased text-gray-800">
 
     <div class="min-h-screen container mx-auto p-4 md:p-8">
@@ -224,7 +308,8 @@
             <!-- Absensi View (Default Active) -->
             <div id="view-absen" class="view active">
                 <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h2 class="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-200 text-blue-700">Formulir Absensi Siswa</h2>
+                    <h2 class="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-200 text-blue-700">Formulir Absensi
+                        Siswa</h2>
                     <form id="attendance-form">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                             <div>
@@ -261,9 +346,10 @@
                         </div>
 
                         <div id="student-list-container" class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <p class="text-center text-gray-500 py-4">Silakan pilih kelas untuk menampilkan daftar siswa.</p>
+                            <p class="text-center text-gray-500 py-4">Silakan pilih kelas untuk menampilkan daftar
+                                siswa.</p>
                         </div>
-                        
+
                         <div class="mt-10 flex justify-end">
                             <button type="submit" id="submit-button" class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 px-8 shadow-xl flex items-center">
                                 <svg id="submit-icon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -271,7 +357,7 @@
                                 <svg id="submit-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                  </svg>
+                                    </svg>
                             </button>
                         </div>
                     </form>
@@ -282,7 +368,8 @@
             <!-- Rekap View -->
             <div id="view-rekap" class="view">
                 <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h2 class="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-200 text-blue-700">Rekapitulasi Absensi</h2>
+                    <h2 class="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-200 text-blue-700">Rekapitulasi
+                        Absensi</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                         <div>
                             <label for="filter-class" class="block text-sm font-medium text-gray-700 mb-2">Filter Kelas</label>
@@ -321,24 +408,30 @@
                             <input type="date" id="filter-date" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
                         </div>
                     </div>
-                    
+
                     <!-- Student/Class summary section -->
-                    <div id="recap-summary" class="hidden mb-6 bg-blue-100 border border-blue-300 p-5 rounded-lg shadow-md transition-all duration-500 ease-in-out">
-                        <h3 class="text-xl font-bold text-blue-800 mb-4"><span id="summary-title">Ringkasan</span>: <span id="summary-target-name" class="text-blue-900"></span></h3>
+                    <div id="recap-summary"
+                        class="hidden mb-6 bg-blue-100 border border-blue-300 p-5 rounded-lg shadow-md transition-all duration-500 ease-in-out">
+                        <h3 class="text-xl font-bold text-blue-800 mb-4"><span id="summary-title">Ringkasan</span>:
+                            <span id="summary-target-name" class="text-blue-900"></span></h3>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                            <div class="bg-green-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
+                            <div
+                                class="bg-green-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
                                 <p class="text-3xl font-bold text-green-800" id="summary-hadir">0</p>
                                 <p class="text-base font-medium text-green-700 mt-1">Hadir</p>
                             </div>
-                            <div class="bg-yellow-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
+                            <div
+                                class="bg-yellow-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
                                 <p class="text-3xl font-bold text-yellow-800" id="summary-sakit">0</p>
                                 <p class="text-base font-medium text-yellow-700 mt-1">Sakit</p>
                             </div>
-                            <div class="bg-blue-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
+                            <div
+                                class="bg-blue-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
                                 <p class="text-3xl font-bold text-blue-800" id="summary-izin">0</p>
                                 <p class="text-base font-medium text-blue-700 mt-1">Izin</p>
                             </div>
-                            <div class="bg-red-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
+                            <div
+                                class="bg-red-200 p-4 rounded-lg shadow-sm transform hover:scale-105 transition-transform duration-200">
                                 <p class="text-3xl font-bold text-red-800" id="summary-alfa">0</p>
                                 <p class="text-base font-medium text-red-700 mt-1">Alfa</p>
                             </div>
@@ -346,8 +439,15 @@
                     </div>
 
                     <div class="flex justify-end mb-4">
-                        <a href="https://docs.google.com/spreadsheets/d/145HIPY1JPtt7KLaXvvfJ6Z6D669zxhmStpbNc-5u1sw/edit?gid=0#gid=0" target="_blank" class="btn bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 px-6 shadow-md flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        <a href="https://docs.google.com/spreadsheets/d/145HIPY1JPtt7KLaXvvfJ6Z6D669zxhmStpbNc-5u1sw/edit?gid=0#gid=0"
+                            target="_blank"
+                            class="btn bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 px-6 shadow-md flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                </path>
+                            </svg>
                             Lihat Data Mentah (Google Sheet)
                         </a>
                     </div>
@@ -356,21 +456,33 @@
                         <table class="min-w-full bg-white">
                             <thead>
                                 <tr>
-                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">NIS</th>
-                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Lengkap</th>
-                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
-                                    <th class="py-3 px-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Ket.</th>
-                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kelas</th>
-                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Mata Pelajaran</th>
+                                    <th
+                                        class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        NIS</th>
+                                    <th
+                                        class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Nama Lengkap</th>
+                                    <th
+                                        class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Tanggal</th>
+                                    <th
+                                        class="py-3 px-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Ket.</th>
+                                    <th
+                                        class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Kelas</th>
+                                    <th
+                                        class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Mata Pelajaran</th>
                                 </tr>
                             </thead>
                             <tbody id="recap-table-body">
                                 <!-- Data will be loaded here -->
                             </tbody>
+                            <div id="recap-loading" class="text-center py-8">
+                                <p class="text-gray-500">Memuat data rekapitulasi...</p>
+                            </div>
                         </table>
-                        <div id="recap-loading" class="text-center py-8">
-                            <p class="text-gray-500">Memuat data rekapitulasi...</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -387,7 +499,8 @@
                 { nis: '10', nama: 'MUH.ANUGRAH' }, { nis: '11', nama: 'MUH.ARYA' }, { nis: '12', nama: 'MUH.RAMADHAN RUSMAN' },
                 { nis: '13', nama: 'MUHAMMAD IMRAN' }, { nis: '14', nama: 'NABILA' }, { nis: '15', nama: 'NUR ANIDA NURDIN' },
                 { nis: '16', nama: 'NUR AZILAH' }, { nis: '17', nama: 'NURUL ANNISA' }, { nis: '18', nama: 'RITA PARADIBA' },
-                { nis: '19', nama: 'SUKUR' }, { nis: '20', nama: 'SYAFIRA' }, { nis: '21', nama: 'ZAKHWAN AHMAD NOVAL' }
+                { nis: '19', nama: 'SUKUR' }, { nis: '20', nama: 'SYAFIRA' }, { nis: '21', nama: 'ZAKHWAN AHMAD NOVAL' },
+                { nis: '22', nama: 'NUR AKILA' } // Added Nur Akila
             ],
             'VII.2': [
                 { nis: '1', nama: 'ALIM FIKRI' }, { nis: '2', nama: 'ALYA ARFAN' }, { nis: '3', nama: 'ANUGRAH NURUSTAZAH' },
@@ -444,6 +557,7 @@
 
         // --- DOM ELEMENTS ---
         const classSelect = document.getElementById('class-select');
+        const subjectSelect = document.getElementById('subject-select'); // Added subject select
         const studentListContainer = document.getElementById('student-list-container');
         const attendanceForm = document.getElementById('attendance-form');
         const submitButton = document.getElementById('submit-button');
@@ -463,6 +577,13 @@
         const filterSubject = document.getElementById('filter-subject');
         const filterName = document.getElementById('filter-name');
         const filterDate = document.getElementById('filter-date');
+        const recapSummary = document.getElementById('recap-summary');
+        const summaryTitle = document.getElementById('summary-title');
+        const summaryTargetName = document.getElementById('summary-target-name');
+        const summaryHadir = document.getElementById('summary-hadir');
+        const summarySakit = document.getElementById('summary-sakit');
+        const summaryIzin = document.getElementById('summary-izin');
+        const summaryAlfa = document.getElementById('summary-alfa');
         
         let allRecapData = [];
 
@@ -498,8 +619,7 @@
             }
 
             const students = studentsData[selectedClass];
-            // Map single-letter status codes to full words for display
-            const statusMap = { 'H': 'Hadir', 'S': 'Sakit', 'I': 'Izin', 'A': 'Alfa' };
+            const statusOptions = ['Hadir', 'Sakit', 'Izin', 'Alfa'];
 
             let tableHTML = `
                 <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
@@ -517,345 +637,303 @@
 
             students.forEach((student, index) => {
                 tableHTML += `
-                    <tr class="student-row" data-nis="${student.nis}" data-nama="${student.nama}">
-                        <td class="px-4 py-3 text-center text-sm text-gray-600">${index + 1}</td>
-                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">${student.nis}</td>
+                    <tr class="${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center">${index + 1}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">${student.nis}</td>
                         <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${student.nama}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600">
-                            <div class="flex justify-center space-x-2 md:space-x-4">
-                                ${['Hadir', 'Sakit', 'Izin', 'Alfa'].map(fullKet => `
-                                    <label class="custom-radio-label flex items-center space-x-1 cursor-pointer">
-                                        <input type="radio" name="status-${student.nis}" value="${fullKet}" ${fullKet === 'Hadir' ? 'checked' : ''}>
-                                        <span class="custom-radio-indicator">${fullKet}</span>
-                                    </label>
-                                `).join('')}
+                        <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
+                            <div class="flex items-center justify-center space-x-2">
+                `;
+                statusOptions.forEach(status => {
+                    tableHTML += `
+                                <label class="custom-radio-label">
+                                    <input type="radio" name="attendance-${student.nis}" value="${status}" required>
+                                    <span class="custom-radio-indicator">${status}</span>
+                                </label>
+                    `;
+                });
+                tableHTML += `
                             </div>
                         </td>
                     </tr>
                 `;
             });
 
-            tableHTML += `</tbody></table></div>`;
+            tableHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
             studentListContainer.innerHTML = tableHTML;
             submitButton.disabled = false;
         }
 
         /**
-         * Handles the submission of attendance data to Google Sheet.
-         * Shows loading state and provides feedback messages.
-         * @param {Event} e - The form submission event.
+         * Handles the form submission for attendance.
+         * Collects data and sends it to Google Sheets via Google Script.
          */
-        async function handleFormSubmit(e) {
+        attendanceForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             submitButton.disabled = true;
-            submitText.textContent = 'Mengirim...';
+            submitText.classList.add('hidden');
             submitSpinner.classList.remove('hidden');
-            statusMessage.textContent = '';
-            statusMessage.className = 'mt-6 text-center text-lg';
+            statusMessage.textContent = ''; // Clear previous messages
 
-            const studentRows = document.querySelectorAll('.student-row');
-            const promises = [];
-            const failedSubmissions = [];
+            const selectedClass = classSelect.value;
+            const selectedSubject = subjectSelect.value;
+            const selectedDate = dateInput.value;
 
-            const kelas = classSelect.value;
-            const pelajaran = document.getElementById('subject-select').value;
-            const tanggal = dateInput.value;
-
-            if (!tanggal) {
-                statusMessage.textContent = 'Harap pilih tanggal absensi.';
-                statusMessage.classList.add('text-red-600', 'font-semibold');
+            if (!selectedClass || !selectedSubject || !selectedDate) {
+                statusMessage.textContent = 'Harap lengkapi semua bidang (Kelas, Mata Pelajaran, Tanggal).';
+                statusMessage.className = 'mt-6 text-center text-lg text-red-600 font-semibold';
                 submitButton.disabled = false;
-                submitText.textContent = 'Simpan Absensi';
+                submitText.classList.remove('hidden');
                 submitSpinner.classList.add('hidden');
                 return;
             }
 
-            studentRows.forEach(row => {
-                const nis = row.dataset.nis;
-                const nama = row.dataset.nama;
-                // Get the full word for keterangan
-                const keterangan = document.querySelector(`input[name="status-${nis}"]:checked`).value;
+            const students = studentsData[selectedClass];
+            const attendanceRecords = [];
 
-                const formData = new FormData();
-                formData.append('NIS', nis);
-                formData.append('Nama Lengkap', nama);
-                formData.append('Tanggal Absen', tanggal);
-                formData.append('Keterangan', keterangan); // Send the full word
-                formData.append('Kelas', kelas);
-                formData.append('Mata Pelajaran', pelajaran);
-                
-                const promise = fetch(googleScriptURL, {
-                    method: 'POST',
-                    body: formData,
-                }).then(response => {
-                    if (!response.ok) {
-                        failedSubmissions.push(nama);
-                    }
-                }).catch(error => {
-                    console.error(`Error submitting data for ${nama}:`, error);
-                    failedSubmissions.push(nama);
-                });
-
-                promises.push(promise);
-            });
-
-            await Promise.all(promises);
-
-            submitButton.disabled = false;
-            submitText.textContent = 'Simpan Absensi';
-            submitSpinner.classList.add('hidden');
-
-            if (failedSubmissions.length === 0) {
-                statusMessage.textContent = 'Data absensi untuk semua siswa berhasil disimpan!';
-                statusMessage.classList.add('text-green-600', 'font-semibold');
-            } else {
-                statusMessage.textContent = `Gagal menyimpan data untuk: ${failedSubmissions.join(', ')}. Silakan coba lagi.`;
-                statusMessage.classList.add('text-red-600', 'font-semibold');
-            }
-        }
-        
-        // --- FUNGSI REKAPITULASI ---
-
-        /**
-         * Custom CSV parser to handle quoted fields and commas within fields.
-         * @param {string} rowString - The raw CSV row string.
-         * @returns {Array<string>} An array of parsed field values.
-         */
-        function parseCSVRow(rowString) {
-            const result = [];
-            let currentField = '';
-            let inQuotes = false;
-            for (let i = 0; i < rowString.length; i++) {
-                const char = rowString[i];
-                if (char === '"' && (i === 0 || rowString[i-1] === ',' || rowString[i-1] === ' ')) {
-                    inQuotes = !inQuotes;
-                    continue;
-                }
-                if (char === ',' && !inQuotes) {
-                    result.push(currentField.trim());
-                    currentField = '';
-                } else {
-                    currentField += char;
-                }
-            }
-            result.push(currentField.trim());
-            return result;
-        }
-
-        /**
-         * Fetches attendance recap data from the published Google Sheet (CSV format).
-         * Updates the global `allRecapData` array.
-         */
-        async function fetchRecapData() {
-            recapLoading.style.display = 'block';
-            recapTableBody.innerHTML = '';
-            document.getElementById('recap-summary').classList.add('hidden');
-            try {
-                const response = await fetch(`${googleSheetRecapURL}&t=${new Date().getTime()}`);
-                if (!response.ok) {
-                    throw new Error('Gagal mengambil data dari Google Sheet. Pastikan link publish sudah benar.');
-                }
-                const csvText = await response.text();
-                const rows = csvText.trim().split('\n').slice(1).filter(row => row.trim() !== '');
-
-                allRecapData = rows.map(row => {
-                    const columns = parseCSVRow(row);
-                    if (columns.length >= 6) {
-                        return {
-                            nis: columns[0],
-                            nama: columns[1],
-                            tanggal: columns[2],
-                            keterangan: columns[3],
-                            kelas: columns[4],
-                            pelajaran: columns[5]
-                        };
-                    }
-                    return null;
-                }).filter(Boolean);
-
-                displayRecapData();
-            } catch (error) {
-                console.error("Error saat mengambil rekap:", error);
-                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">Error: ${error.message}<br>Pastikan Google Sheet sudah dipublikasikan ke web sebagai CSV.</td></tr>`;
-            } finally {
-                recapLoading.style.display = 'none';
-            }
-        }
-
-        /**
-         * Displays and filters the recap data in the table.
-         * Also calculates and displays the summary for a single student or an entire class.
-         */
-        function displayRecapData() {
-            const classQuery = filterClass.value;
-            const subjectQuery = filterSubject.value;
-            const nameQuery = filterName.value.toLowerCase();
-            const dateQuery = filterDate.value;
-
-            const filteredData = allRecapData.filter(item => {
-                const classMatch = classQuery ? item.kelas === classQuery : true;
-                const subjectMatch = subjectQuery ? item.pelajaran === subjectQuery : true;
-                const nameMatch = item.nama && item.nama.toLowerCase().includes(nameQuery);
-                const dateMatch = dateQuery ? item.tanggal === dateQuery : true;
-                return classMatch && subjectMatch && nameMatch && dateMatch;
-            });
-
-            const summaryContainer = document.getElementById('recap-summary');
-            const summaryTitle = document.getElementById('summary-title');
-            const summaryTargetName = document.getElementById('summary-target-name');
-            
-            if (nameQuery.trim() !== '') {
-                const studentDataForSummary = allRecapData.filter(item => 
-                    item.nama && item.nama.toLowerCase().includes(nameQuery) && 
-                    (classQuery ? item.kelas === classQuery : true) &&
-                    (subjectQuery ? item.pelajaran === subjectQuery : true)
-                );
-                
-                if (studentDataForSummary.length > 0) {
-                    const firstStudentName = studentDataForSummary[0].nama;
-                    const isSingleStudent = studentDataForSummary.every(item => item.nama === firstStudentName);
-                    
-                    if (isSingleStudent) {
-                        const counts = { 'Hadir': 0, 'Sakit': 0, 'Izin': 0, 'Alfa': 0 }; // Use full words
-                        studentDataForSummary.forEach(item => {
-                            const status = item.keterangan; // Already full word from Google Sheet
-                            if (counts.hasOwnProperty(status)) {
-                                counts[status]++;
-                            }
-                        });
-
-                        summaryTitle.textContent = 'Ringkasan untuk';
-                        summaryTargetName.textContent = firstStudentName;
-                        document.getElementById('summary-hadir').textContent = counts['Hadir'];
-                        document.getElementById('summary-sakit').textContent = counts['Sakit'];
-                        document.getElementById('summary-izin').textContent = counts['Izin'];
-                        document.getElementById('summary-alfa').textContent = counts['Alfa'];
-                        summaryContainer.classList.remove('hidden');
-                    } else {
-                        summaryContainer.classList.add('hidden');
-                    }
-                } else {
-                    summaryContainer.classList.add('hidden');
-                }
-            } else if (classQuery.trim() !== '' || subjectQuery.trim() !== '') {
-                const groupDataForSummary = allRecapData.filter(item => 
-                    (classQuery ? item.kelas === classQuery : true) &&
-                    (subjectQuery ? item.pelajaran === subjectQuery : true)
-                );
-                
-                if (groupDataForSummary.length > 0) {
-                    const counts = { 'Hadir': 0, 'Sakit': 0, 'Izin': 0, 'Alfa': 0 }; // Use full words
-                    groupDataForSummary.forEach(item => {
-                        const status = item.keterangan; // Already full word
-                        if (counts.hasOwnProperty(status)) {
-                            counts[status]++;
-                        }
+            students.forEach(student => {
+                const statusElement = document.querySelector(`input[name="attendance-${student.nis}"]:checked`);
+                if (statusElement) {
+                    attendanceRecords.push({
+                        nis: student.nis,
+                        nama: student.nama,
+                        kelas: selectedClass,
+                        mata_pelajaran: selectedSubject,
+                        tanggal: selectedDate,
+                        keterangan: statusElement.value
                     });
-                    summaryTitle.textContent = 'Ringkasan';
-                    summaryTargetName.textContent = '';
-                    if (classQuery && subjectQuery) {
-                        summaryTargetName.textContent = `Kelas ${classQuery} - ${subjectQuery}`;
-                    } else if (classQuery) {
-                        summaryTargetName.textContent = `Kelas ${classQuery}`;
-                    } else if (subjectQuery) {
-                        summaryTargetName.textContent = `Mata Pelajaran ${subjectQuery}`;
-                    }
-                    
-                    document.getElementById('summary-hadir').textContent = counts['Hadir'];
-                    document.getElementById('summary-sakit').textContent = counts['Sakit'];
-                    document.getElementById('summary-izin').textContent = counts['Izin'];
-                    document.getElementById('summary-alfa').textContent = counts['Alfa'];
-                    summaryContainer.classList.remove('hidden');
-                } else {
-                    summaryContainer.classList.add('hidden');
                 }
-            } else {
-                summaryContainer.classList.add('hidden');
-            }
+            });
 
-
-            recapTableBody.innerHTML = ''; 
-            if (filteredData.length === 0) {
-                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Tidak ada data yang cocok.</td></tr>`;
+            if (attendanceRecords.length === 0) {
+                statusMessage.textContent = 'Tidak ada data absensi yang dipilih. Harap pilih status absensi untuk setiap siswa.';
+                statusMessage.className = 'mt-6 text-center text-lg text-red-600 font-semibold';
+                submitButton.disabled = false;
+                submitText.classList.remove('hidden');
+                submitSpinner.classList.add('hidden');
                 return;
             }
 
-            filteredData.forEach(item => {
-                // Map full word status to appropriate Tailwind CSS classes
-                const ketClass = {
-                    'Hadir': 'bg-green-100 text-green-800',
-                    'Sakit': 'bg-yellow-100 text-yellow-800',
-                    'Izin': 'bg-blue-100 text-blue-800',
-                    'Alfa': 'bg-red-100 text-red-800'
-                }[item.keterangan] || 'bg-gray-100 text-gray-800';
+            try {
+                const response = await fetch(googleScriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Important for Google Apps Script
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ records: attendanceRecords })
+                });
 
-                const row = `
-                    <tr>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm">${item.nis}</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">${item.nama}</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm">${item.tanggal}</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-center">
-                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${ketClass}">
-                                ${item.keterangan}
-                            </span>
-                        </td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm">${item.kelas}</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm">${item.pelajaran}</td>
-                    </tr>
-                `;
-                recapTableBody.innerHTML += row;
-            });
-        }
+                // Since mode is 'no-cors', we can't directly read response.
+                // Assume success and provide user feedback.
+                statusMessage.textContent = 'Absensi berhasil disimpan!';
+                statusMessage.className = 'mt-6 text-center text-lg text-green-600 font-semibold';
+                attendanceForm.reset(); // Reset the form after successful submission
+                populateStudentList(); // Re-populate to clear selections and show default message
+            } catch (error) {
+                console.error('Error submitting attendance:', error);
+                statusMessage.textContent = 'Terjadi kesalahan saat menyimpan absensi. Silakan coba lagi.';
+                statusMessage.className = 'mt-6 text-center text-lg text-red-600 font-semibold';
+            } finally {
+                submitButton.disabled = false;
+                submitText.classList.remove('hidden');
+                submitSpinner.classList.add('hidden');
+            }
+        });
 
-        // --- NAVIGASI ---
         /**
-         * Switches the active view between 'Input Absensi' and 'Rekap Absensi'.
-         * Updates navigation button styles and fetches recap data if switching to recap view.
+         * Switches between the "Input Absensi" and "Rekap Absensi" views.
          * @param {string} viewId - The ID of the view to activate ('view-absen' or 'view-rekap').
          */
         function switchView(viewId) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+            viewAbsen.classList.remove('active');
+            viewRekap.classList.remove('active');
+            navAbsen.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
+            navAbsen.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
+            navRekap.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
+            navRekap.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
 
             if (viewId === 'view-absen') {
+                viewAbsen.classList.add('active');
                 navAbsen.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
                 navAbsen.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-                navRekap.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-                navRekap.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
             } else if (viewId === 'view-rekap') {
+                viewRekap.classList.add('active');
                 navRekap.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
                 navRekap.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-                navAbsen.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-                navAbsen.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
-                fetchRecapData();
+                loadRecapData(); // Load recap data when switching to recap view
             }
         }
 
-        // --- EVENT LISTENERS ---
-        document.addEventListener('DOMContentLoaded', () => {
-            updateClock();
-            setInterval(updateClock, 1000);
+        // Event listeners for navigation buttons
+        navAbsen.addEventListener('click', () => switchView('view-absen'));
+        navRekap.addEventListener('click', () => switchView('view-rekap'));
 
+        /**
+         * Fetches attendance recap data from Google Sheet CSV export.
+         */
+        async function loadRecapData() {
+            recapLoading.classList.remove('hidden');
+            recapTableBody.innerHTML = ''; // Clear existing table
+            recapSummary.classList.add('hidden'); // Hide summary until data is loaded/filtered
+
+            try {
+                const response = await fetch(googleSheetRecapURL);
+                const csvText = await response.text();
+                allRecapData = parseCSV(csvText);
+                renderRecapTable(); // Render table with all data initially
+            } catch (error) {
+                console.error('Error loading recap data:', error);
+                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">Gagal memuat data rekapitulasi.</td></tr>`;
+            } finally {
+                recapLoading.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Parses CSV text into an array of objects.
+         * Assumes the first row is the header.
+         * @param {string} csv - The CSV data as a string.
+         * @returns {Array<Object>} An array of objects representing the CSV data.
+         */
+        function parseCSV(csv) {
+            const lines = csv.split('\n').filter(line => line.trim() !== ''); // Filter out empty lines
+            if (lines.length === 0) return [];
+
+            const headers = lines[0].split(',').map(header => header.trim().replace(/"/g, ''));
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(value => value.trim().replace(/"/g, ''));
+                if (values.length === headers.length) {
+                    let row = {};
+                    headers.forEach((header, index) => {
+                        row[header.toLowerCase().replace(/\s/g, '_')] = values[index]; // Convert headers to snake_case
+                    });
+                    data.push(row);
+                }
+            }
+            return data;
+        }
+
+        /**
+         * Renders the recap table and updates the summary based on filtered data.
+         */
+        function renderRecapTable() {
+            let filteredData = [...allRecapData]; // Create a mutable copy
+
+            const selectedClass = filterClass.value;
+            const selectedSubject = filterSubject.value;
+            const searchName = filterName.value.toLowerCase();
+            const selectedDate = filterDate.value;
+
+            if (selectedClass) {
+                filteredData = filteredData.filter(record => record.kelas === selectedClass);
+            }
+            if (selectedSubject) {
+                filteredData = filteredData.filter(record => record.mata_pelajaran === selectedSubject);
+            }
+            if (searchName) {
+                filteredData = filteredData.filter(record => record.nama_lengkap.toLowerCase().includes(searchName));
+            }
+            if (selectedDate) {
+                filteredData = filteredData.filter(record => record.tanggal === selectedDate);
+            }
+
+            recapTableBody.innerHTML = ''; // Clear table before rendering
+            if (filteredData.length === 0) {
+                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Tidak ada data absensi yang ditemukan.</td></tr>`;
+                recapSummary.classList.add('hidden');
+            } else {
+                filteredData.forEach(record => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${record.nis}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${record.nama_lengkap}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${record.tanggal}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-semibold ${
+                            record.ket === 'Hadir' ? 'text-green-600' :
+                            record.ket === 'Sakit' ? 'text-yellow-600' :
+                            record.ket === 'Izin' ? 'text-blue-600' :
+                            record.ket === 'Alfa' ? 'text-red-600' : ''
+                        }">${record.ket}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${record.kelas}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${record.mata_pelajaran}</td>
+                    `;
+                    recapTableBody.appendChild(row);
+                });
+                updateRecapSummary(filteredData, selectedClass, searchName);
+            }
+        }
+
+        /**
+         * Updates the summary section with attendance counts.
+         * @param {Array<Object>} data - The filtered attendance data.
+         * @param {string} selectedClass - The currently selected class for filtering.
+         * @param {string} searchName - The currently searched student name.
+         */
+        function updateRecapSummary(data, selectedClass, searchName) {
+            const counts = { Hadir: 0, Sakit: 0, Izin: 0, Alfa: 0 };
+            data.forEach(record => {
+                if (counts.hasOwnProperty(record.ket)) {
+                    counts[record.ket]++;
+                }
+            });
+
+            summaryHadir.textContent = counts.Hadir;
+            summarySakit.textContent = counts.Sakit;
+            summaryIzin.textContent = counts.Izin;
+            summaryAlfa.textContent = counts.Alfa;
+
+            if (searchName) {
+                summaryTitle.textContent = 'Ringkasan Absensi Siswa';
+                summaryTargetName.textContent = filterName.value;
+            } else if (selectedClass) {
+                summaryTitle.textContent = 'Ringkasan Absensi Kelas';
+                summaryTargetName.textContent = selectedClass;
+            } else {
+                summaryTitle.textContent = 'Ringkasan Absensi Keseluruhan';
+                summaryTargetName.textContent = ''; // Clear if no specific class or name is filtered
+            }
+            recapSummary.classList.remove('hidden');
+        }
+
+
+        // Event listeners for recap filters
+        filterClass.addEventListener('change', renderRecapTable);
+        filterSubject.addEventListener('change', renderRecapTable);
+        filterName.addEventListener('input', renderRecapTable); // Use 'input' for real-time filtering
+        filterDate.addEventListener('change', renderRecapTable);
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current date to the date input field
             const today = new Date();
             const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
             const dd = String(today.getDate()).padStart(2, '0');
             dateInput.value = `${yyyy}-${mm}-${dd}`;
 
-            classSelect.addEventListener('change', populateStudentList);
-            attendanceForm.addEventListener('submit', handleFormSubmit);
+            updateClock(); // Initial clock update
+            setInterval(updateClock, 1000); // Update clock every second
 
-            navAbsen.addEventListener('click', () => switchView('view-absen'));
-            navRekap.addEventListener('click', () => switchView('view-rekap'));
-
-            filterClass.addEventListener('change', displayRecapData);
-            filterSubject.addEventListener('change', displayRecapData);
-            filterName.addEventListener('input', displayRecapData);
-            filterDate.addEventListener('change', displayRecapData);
-
-            populateStudentList();
+            populateStudentList(); // Populate student list on initial load
+            
+            // Ensure the correct navigation button is active on load
+            navAbsen.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'font-semibold', 'py-3', 'px-6', 'shadow-md');
+            navAbsen.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
         });
+
+        // Event listener for class selection change
+        classSelect.addEventListener('change', populateStudentList);
+
     </script>
 </body>
+
 </html>
