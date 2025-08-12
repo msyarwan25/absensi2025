@@ -164,13 +164,13 @@
             border-bottom: none; /* No border on the last row */
         }
         /* Table row alternating background and hover */
-        #recap-table-body tr:nth-child(odd) {
+        #recap-table-body tr:nth-child(odd), #subject-recap-table-body tr:nth-child(odd) {
             background-color: #ffffff; /* White for odd rows */
         }
-        #recap-table-body tr:nth-child(even) {
+        #recap-table-body tr:nth-child(even), #subject-recap-table-body tr:nth-child(even) {
             background-color: #f8fafc; /* Lighter alternating row */
         }
-        #recap-table-body tr:hover {
+        #recap-table-body tr:hover, #subject-recap-table-body tr:hover {
             background-color: #e0f2fe; /* Light blue on hover */
             transition: background-color 0.2s ease-in-out;
         }
@@ -214,7 +214,10 @@
                     Input Absensi
                 </button>
                 <button id="nav-rekap" class="btn bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6">
-                    Rekap Absensi
+                    Rekap Absensi Harian
+                </button>
+                <button id="nav-subject-rekap" class="btn bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6">
+                    Rekap Per Mata Pelajaran
                 </button>
             </nav>
         </header>
@@ -279,10 +282,10 @@
                 </div>
             </div>
 
-            <!-- Rekap View -->
+            <!-- Rekap Harian View -->
             <div id="view-rekap" class="view">
                 <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h2 class="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-200 text-blue-700">Rekapitulasi Absensi</h2>
+                    <h2 class="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-200 text-blue-700">Rekapitulasi Absensi Harian</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
                         <div>
                             <label for="filter-class" class="block text-sm font-medium text-gray-700 mb-2">Filter Kelas</label>
@@ -346,7 +349,6 @@
                     </div>
 
                     <div class="flex justify-end mb-4">
-                        <!-- Perhatian: URL ini mungkin perlu diperbarui agar sesuai dengan Google Sheet Anda -->
                         <a href="https://docs.google.com/spreadsheets/d/145HIPY1JPtt7KLaXvvfJ6Z6D669zxhmStpbNc-5u1sw/edit?gid=0#gid=0" target="_blank" class="btn bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 px-6 shadow-md flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                             Lihat Data Mentah (Google Sheet)
@@ -369,6 +371,76 @@
                                 <!-- Data akan dimuat di sini -->
                             </tbody>
                             <div id="recap-loading" class="text-center py-8">
+                                <p class="text-gray-500">Memuat data rekapitulasi...</p>
+                            </div>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rekap Per Mata Pelajaran View -->
+            <div id="view-subject-rekap" class="view">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-200 text-blue-700">Rekap Absensi Per Mata Pelajaran</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-6">
+                        <div>
+                            <label for="subject-recap-select" class="block text-sm font-medium text-gray-700 mb-2">Pilih Mata Pelajaran</label>
+                            <select id="subject-recap-select" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">-- Pilih Mata Pelajaran --</option>
+                                <option>IPA</option>
+                                <option>INFORMATIKA</option>
+                                <option>MATEMATIKA</option>
+                                <option>BAHASA INDONESIA</option>
+                                <option>BAHASA INGGRIS</option>
+                                <option>PENDIDIKAN AGAMA</option>
+                                <option>PJOK</option>
+                                <option>SENI BUDAYA</option>
+                                <option>IPS</option>
+                                <option>PPKN</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="subject-recap-class-select" class="block text-sm font-medium text-gray-700 mb-2">Pilih Kelas</label>
+                            <select id="subject-recap-class-select" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">-- Pilih Kelas --</option>
+                                <option value="VII.1">VII.1</option>
+                                <option value="VII.2">VII.2</option>
+                                <option value="VIII.1">VIII.1</option>
+                                <option value="VIII.2">VIII.2</option>
+                                <option value="IX.1">IX.1</option>
+                                <option value="IX.2">IX.2</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button id="subject-recap-button" class="btn w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 shadow-md flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+                                <svg id="recap-icon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"></path></svg>
+                                <span id="recap-text">Lihat Rekap</span>
+                                <svg id="recap-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto table-container mt-6">
+                        <table class="min-w-full bg-white">
+                            <thead>
+                                <tr>
+                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">NIS</th>
+                                    <th class="py-3 px-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Lengkap</th>
+                                    <th class="py-3 px-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Hadir</th>
+                                    <th class="py-3 px-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Sakit</th>
+                                    <th class="py-3 px-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Izin</th>
+                                    <th class="py-3 px-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Alfa</th>
+                                    <th class="py-3 px-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Total Pertemuan</th>
+                                    <th class="py-3 px-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Persentase Kehadiran</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subject-recap-table-body">
+                                <tr><td colspan="8" class="text-center py-4 text-gray-500">Pilih mata pelajaran dan kelas, lalu klik **Lihat Rekap** untuk menampilkan data.</td></tr>
+                            </tbody>
+                            <div id="subject-recap-loading" class="hidden text-center py-8">
                                 <p class="text-gray-500">Memuat data rekapitulasi...</p>
                             </div>
                         </table>
@@ -438,21 +510,25 @@
                 { nis: '2024371', nama: 'FITRA RAMADANI' }, { nis: '2024373', nama: 'SISKA' }
             ]
         };
+        
+        // Gabungkan semua siswa ke dalam satu array untuk memudahkan pemrosesan rekap
+        const allStudents = Object.values(studentsData).flat();
+        
+        const allClasses = Object.keys(studentsData);
 
         // --- KONFIGURASI ---
         // URL Google Apps Script Anda yang baru
         const googleScriptURL = 'https://script.google.com/macros/s/AKfycbx53NQBkdHJV-G4AlCfvdWhcsFe_EKSEj47vyVxQImIqgnXpMqy1hgULOgqACCbVW8zgQ/exec';
         
         // URL untuk rekap data dari Google Sheet (CSV).
-        // Perhatian: Ini adalah URL contoh. Anda harus membuat URL publikasi CSV dari Google Sheet Anda
-        // dan menggantinya di sini. Pastikan sheet memiliki header yang sama dengan nama kolom di script Anda.
+        // URL ini telah disesuaikan agar bisa mengambil data mentah (CSV).
         const googleSheetRecapURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ27ncSSFBRM9qe1-Oc4Q4OL2USYZ5-zDgZS7Osyj7Yywv-BRda3ZLekf7fQPH-NO6d5E58hMbn2uuB/pub?gid=0&single=true&output=csv';
         // URL untuk melihat Google Sheet mentah Anda
         const rawGoogleSheetURL = 'https://docs.google.com/spreadsheets/d/145HIPY1JPtt7KLaXvvfJ6Z6D669zxhmStpbNc-5u1sw/edit?gid=0#gid=0';
 
         // --- DOM ELEMENTS ---
         const classSelect = document.getElementById('class-select');
-        const subjectSelect = document.getElementById('subject-select'); // Added subject select
+        const subjectSelect = document.getElementById('subject-select');
         const studentListContainer = document.getElementById('student-list-container');
         const attendanceForm = document.getElementById('attendance-form');
         const submitButton = document.getElementById('submit-button');
@@ -463,8 +539,10 @@
 
         const navAbsen = document.getElementById('nav-absen');
         const navRekap = document.getElementById('nav-rekap');
+        const navSubjectRecap = document.getElementById('nav-subject-rekap');
         const viewAbsen = document.getElementById('view-absen');
         const viewRekap = document.getElementById('view-rekap');
+        const viewSubjectRecap = document.getElementById('view-subject-rekap');
 
         const recapTableBody = document.getElementById('recap-table-body');
         const recapLoading = document.getElementById('recap-loading');
@@ -480,12 +558,20 @@
         const summaryIzin = document.getElementById('summary-izin');
         const summaryAlfa = document.getElementById('summary-alfa');
         
+        const subjectRecapSelect = document.getElementById('subject-recap-select');
+        const subjectRecapClassSelect = document.getElementById('subject-recap-class-select');
+        const subjectRecapButton = document.getElementById('subject-recap-button');
+        const subjectRecapTableBody = document.getElementById('subject-recap-table-body');
+        const subjectRecapLoading = document.getElementById('subject-recap-loading');
+        const recapSpinner = document.getElementById('recap-spinner');
+        const recapText = document.getElementById('recap-text');
+        
         let allRecapData = [];
 
         // --- FUNGSI JAM & TANGGAL (WITA) ---
         /**
-         * Updates the clock and date display in the header.
-         * Displays time in WITA (Central Indonesia Time).
+         * Mengupdate tampilan jam dan tanggal di header.
+         * Menampilkan waktu dalam WITA (Waktu Indonesia Tengah).
          */
         function updateClock() {
             const timeDisplay = document.getElementById('time-display');
@@ -495,21 +581,21 @@
             const optionsTime = { timeZone: 'Asia/Makassar', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             const optionsDate = { timeZone: 'Asia/Makassar', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-            timeDisplay.textContent = `WITA: ${new Intl.DateTimeFormat('id-ID', optionsTime).format(now)}`;
-            dateDisplay.textContent = new Intl.DateTimeFormat('id-ID', optionsDate).format(now);
+            if (timeDisplay) timeDisplay.textContent = `WITA: ${new Intl.DateTimeFormat('id-ID', optionsTime).format(now)}`;
+            if (dateDisplay) dateDisplay.textContent = new Intl.DateTimeFormat('id-ID', optionsDate).format(now);
         }
 
         // --- FUNGSI UTAMA APLIKASI ---
 
         /**
-         * Populates the student list table based on the selected class.
-         * Enables/disables the submit button accordingly.
+         * Mengisi daftar siswa berdasarkan kelas yang dipilih.
+         * Mengaktifkan/menonaktifkan tombol kirim sesuai kondisi.
          */
         function populateStudentList() {
             const selectedClass = classSelect.value;
             if (!selectedClass) {
-                studentListContainer.innerHTML = '<p class="text-center text-gray-500 py-4">Silakan pilih kelas untuk menampilkan daftar siswa.</p>';
-                submitButton.disabled = true;
+                if (studentListContainer) studentListContainer.innerHTML = '<p class="text-center text-gray-500 py-4">Silakan pilih kelas untuk menampilkan daftar siswa.</p>';
+                if (submitButton) submitButton.disabled = true;
                 return;
             }
 
@@ -540,7 +626,7 @@
                             <div class="flex items-center justify-center space-x-2">
                 `;
                 statusOptions.forEach(status => {
-                    const isChecked = status === 'Hadir' && selectedClass;
+                    const isChecked = status === 'Hadir'; // Default to Hadir for new selection
                     tableHTML += `
                                 <label class="custom-radio-label">
                                     <input type="radio" name="attendance-${student.nis}" value="${status}" ${isChecked ? 'checked' : ''} required>
@@ -560,174 +646,223 @@
                     </table>
                 </div>
             `;
-            studentListContainer.innerHTML = tableHTML;
-            submitButton.disabled = false;
+            if (studentListContainer) studentListContainer.innerHTML = tableHTML;
+            if (submitButton) submitButton.disabled = false;
         }
 
         /**
-         * Handles the form submission for attendance.
-         * Collects data and sends each student's record to Google Apps Script.
-         * The new logic sends each record as a separate form submission.
+         * Menangani pengiriman form absensi.
+         * Mengumpulkan data dan mengirim setiap catatan siswa ke Google Apps Script.
          */
-        attendanceForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        if (attendanceForm) {
+            attendanceForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
 
-            submitButton.disabled = true;
-            submitText.classList.add('hidden');
-            submitSpinner.classList.remove('hidden');
-            statusMessage.textContent = ''; // Clear previous messages
+                if (submitButton) submitButton.disabled = true;
+                if (submitText) submitText.classList.add('hidden');
+                if (submitSpinner) submitSpinner.classList.remove('hidden');
+                if (statusMessage) statusMessage.textContent = ''; // Clear previous messages
 
-            const selectedClass = classSelect.value;
-            const selectedSubject = subjectSelect.value;
-            const selectedDate = dateInput.value;
+                const selectedClass = classSelect.value;
+                const selectedSubject = subjectSelect.value;
+                const selectedDate = dateInput.value;
 
-            if (!selectedClass || !selectedSubject || !selectedDate) {
-                statusMessage.textContent = 'Harap lengkapi semua bidang (Kelas, Mata Pelajaran, Tanggal).';
-                statusMessage.className = 'mt-6 text-center text-lg text-red-600 font-semibold';
-                submitButton.disabled = false;
-                submitText.classList.remove('hidden');
-                submitSpinner.classList.add('hidden');
-                return;
-            }
+                if (!selectedClass || !selectedSubject || !selectedDate) {
+                    if (statusMessage) {
+                        statusMessage.textContent = 'Harap lengkapi semua bidang (Kelas, Mata Pelajaran, Tanggal).';
+                        statusMessage.className = 'mt-6 text-center text-lg text-red-600 font-semibold';
+                    }
+                    if (submitButton) submitButton.disabled = false;
+                    if (submitText) submitText.classList.remove('hidden');
+                    if (submitSpinner) submitSpinner.classList.add('hidden');
+                    return;
+                }
 
-            const students = studentsData[selectedClass];
-            const attendanceRecords = [];
+                const students = studentsData[selectedClass];
+                const attendanceRecords = [];
 
-            students.forEach(student => {
-                const statusElement = document.querySelector(`input[name="attendance-${student.nis}"]:checked`);
-                if (statusElement) {
-                    attendanceRecords.push({
-                        nis: student.nis,
-                        nama: student.nama,
-                        kelas: selectedClass,
-                        mata_pelajaran: selectedSubject,
-                        tanggal: selectedDate,
-                        keterangan: statusElement.value
-                    });
+                students.forEach(student => {
+                    const statusElement = document.querySelector(`input[name="attendance-${student.nis}"]:checked`);
+                    if (statusElement) {
+                        attendanceRecords.push({
+                            nis: student.nis,
+                            nama: student.nama,
+                            kelas: selectedClass,
+                            mata_pelajaran: selectedSubject,
+                            tanggal: selectedDate,
+                            keterangan: statusElement.value
+                        });
+                    }
+                });
+
+                if (attendanceRecords.length === 0) {
+                    if (statusMessage) {
+                        statusMessage.textContent = 'Tidak ada data absensi yang dipilih. Harap pilih status absensi untuk setiap siswa.';
+                        statusMessage.className = 'mt-6 text-center text-lg text-red-600 font-semibold';
+                    }
+                    if (submitButton) submitButton.disabled = false;
+                    if (submitText) submitText.classList.remove('hidden');
+                    if (submitSpinner) submitSpinner.classList.add('hidden');
+                    return;
+                }
+                
+                let successCount = 0;
+                let errorCount = 0;
+
+                try {
+                    for (const record of attendanceRecords) {
+                        const params = new URLSearchParams({
+                            'NIS': record.nis,
+                            'Nama Lengkap': record.nama,
+                            'Tanggal Absen': record.tanggal,
+                            'Keterangan': record.keterangan,
+                            'Kelas': record.kelas,
+                            'Mata Pelajaran': record.mata_pelajaran
+                        });
+
+                        // Tampilkan status pengiriman per siswa
+                        if (statusMessage) {
+                             statusMessage.textContent = `Mengirim data absensi untuk ${record.nama}...`;
+                             statusMessage.className = 'mt-6 text-center text-lg text-blue-600 font-semibold';
+                        }
+
+
+                        // Mengirim data sebagai form URL-encoded
+                        const response = await fetch(googleScriptURL, {
+                            method: 'POST',
+                            body: params
+                        });
+
+                        if (response.ok) {
+                            successCount++;
+                        } else {
+                            errorCount++;
+                        }
+                    }
+                    
+                    // Tampilkan pesan akhir setelah semua permintaan selesai
+                    if (errorCount === 0) {
+                        if (statusMessage) {
+                             statusMessage.textContent = `Absensi untuk ${successCount} siswa berhasil disimpan!`;
+                             statusMessage.className = 'mt-6 text-center text-lg text-green-600 font-semibold';
+                        }
+                        attendanceForm.reset(); // Reset form
+                        if (dateInput) {
+                            const today = new Date();
+                            const yyyy = today.getFullYear();
+                            const mm = String(today.getMonth() + 1).padStart(2, '0');
+                            const dd = String(today.getDate()).padStart(2, '0');
+                            dateInput.value = `${yyyy}-${mm}-${dd}`;
+                        }
+                        populateStudentList(); // Re-populate to clear selections
+                    } else {
+                        if (statusMessage) {
+                             statusMessage.textContent = `Absensi berhasil disimpan untuk ${successCount} siswa, tetapi gagal untuk ${errorCount} siswa.`;
+                             statusMessage.className = 'mt-6 text-center text-lg text-yellow-600 font-semibold';
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Error submitting attendance:', error);
+                    if (statusMessage) {
+                        statusMessage.textContent = 'Terjadi kesalahan saat menyimpan absensi. Silakan coba lagi.';
+                        statusMessage.className = 'mt-6 text-center text-lg text-red-600 font-semibold';
+                    }
+                } finally {
+                    if (submitButton) submitButton.disabled = false;
+                    if (submitText) submitText.classList.remove('hidden');
+                    if (submitSpinner) submitSpinner.classList.add('hidden');
+                }
+            });
+        }
+
+
+        /**
+         * Berpindah antar tampilan yang berbeda.
+         * @param {string} viewId - ID tampilan yang akan diaktifkan.
+         */
+        function switchView(viewId) {
+            // Sembunyikan semua tampilan dengan aman
+            if (viewAbsen) viewAbsen.classList.remove('active');
+            if (viewRekap) viewRekap.classList.remove('active');
+            if (viewSubjectRecap) viewSubjectRecap.classList.remove('active');
+            
+            // Atur ulang tombol navigasi dengan aman
+            const navButtons = [navAbsen, navRekap, navSubjectRecap];
+            navButtons.forEach(btn => {
+                if (btn) {
+                    btn.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
+                    btn.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
                 }
             });
 
-            if (attendanceRecords.length === 0) {
-                statusMessage.textContent = 'Tidak ada data absensi yang dipilih. Harap pilih status absensi untuk setiap siswa.';
-                statusMessage.className = 'mt-6 text-center text-lg text-red-600 font-semibold';
-                submitButton.disabled = false;
-                submitText.classList.remove('hidden');
-                submitSpinner.classList.add('hidden');
-                return;
+            // Aktifkan tampilan yang dipilih dan tombolnya dengan aman
+            const activeView = document.getElementById(viewId);
+            if (activeView) {
+                activeView.classList.add('active');
             }
-            
-            let successCount = 0;
-            let errorCount = 0;
 
-            try {
-                for (const record of attendanceRecords) {
-                    const params = new URLSearchParams({
-                        'NIS': record.nis,
-                        'Nama Lengkap': record.nama,
-                        'Tanggal Absen': record.tanggal,
-                        'Keterangan': record.keterangan,
-                        'Kelas': record.kelas,
-                        'Mata Pelajaran': record.mata_pelajaran
-                    });
-
-                    // Tampilkan status pengiriman per siswa
-                    statusMessage.textContent = `Mengirim data absensi untuk ${record.nama}...`;
-                    statusMessage.className = 'mt-6 text-center text-lg text-blue-600 font-semibold';
-
-                    // Mengirim data sebagai form URL-encoded
-                    const response = await fetch(googleScriptURL, {
-                        method: 'POST',
-                        body: params
-                    });
-
-                    if (response.ok) {
-                        successCount++;
-                    } else {
-                        errorCount++;
-                    }
-                }
-                
-                // Tampilkan pesan akhir setelah semua permintaan selesai
-                if (errorCount === 0) {
-                    statusMessage.textContent = `Absensi untuk ${successCount} siswa berhasil disimpan!`;
-                    statusMessage.className = 'mt-6 text-center text-lg text-green-600 font-semibold';
-                    attendanceForm.reset(); // Reset form
-                    populateStudentList(); // Re-populate to clear selections
-                } else {
-                    statusMessage.textContent = `Absensi berhasil disimpan untuk ${successCount} siswa, tetapi gagal untuk ${errorCount} siswa.`;
-                    statusMessage.className = 'mt-6 text-center text-lg text-yellow-600 font-semibold';
-                }
-
-            } catch (error) {
-                console.error('Error submitting attendance:', error);
-                statusMessage.textContent = 'Terjadi kesalahan saat menyimpan absensi. Silakan coba lagi.';
-                statusMessage.className = 'mt-6 text-center text-lg text-red-600 font-semibold';
-            } finally {
-                submitButton.disabled = false;
-                submitText.classList.remove('hidden');
-                submitSpinner.classList.add('hidden');
+            const navId = 'nav-' + viewId.split('-')[1];
+            const activeButton = document.getElementById(navId);
+            if (activeButton) {
+                activeButton.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
+                activeButton.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
             }
-        });
 
-        /**
-         * Switches between the "Input Absensi" and "Rekap Absensi" views.
-         * @param {string} viewId - The ID of the view to activate ('view-absen' or 'view-rekap').
-         */
-        function switchView(viewId) {
-            viewAbsen.classList.remove('active');
-            viewRekap.classList.remove('active');
-            navAbsen.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
-            navAbsen.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-            navRekap.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
-            navRekap.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-
-            if (viewId === 'view-absen') {
-                viewAbsen.classList.add('active');
-                navAbsen.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
-                navAbsen.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-            } else if (viewId === 'view-rekap') {
-                viewRekap.classList.add('active');
-                navRekap.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'shadow-md');
-                navRekap.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
-                loadRecapData(); // Load recap data when switching to recap view
+            // Muat data saat beralih ke tampilan rekap
+            if (viewId === 'view-rekap' || viewId === 'view-subject-rekap') {
+                loadRecapData();
             }
         }
 
-        // Event listeners for navigation buttons
-        navAbsen.addEventListener('click', () => switchView('view-absen'));
-        navRekap.addEventListener('click', () => switchView('view-rekap'));
+        // Event listeners untuk tombol navigasi
+        if (navAbsen) navAbsen.addEventListener('click', () => switchView('view-absen'));
+        if (navRekap) navRekap.addEventListener('click', () => switchView('view-rekap'));
+        if (navSubjectRecap) navSubjectRecap.addEventListener('click', () => switchView('view-subject-rekap'));
 
         /**
-         * Fetches attendance recap data from Google Sheet CSV export.
+         * Mengambil data rekap absensi dari Google Sheet yang diekspor sebagai CSV.
          */
         async function loadRecapData() {
-            recapLoading.classList.remove('hidden');
-            recapTableBody.innerHTML = ''; // Clear existing table
-            recapSummary.classList.add('hidden'); // Hide summary until data is loaded/filtered
+            // Hanya tampilkan loading jika tabel tidak berisi data.
+            const isDailyRecapEmpty = recapTableBody && recapTableBody.getElementsByTagName('tr').length === 0;
+            const isSubjectRecapEmpty = subjectRecapTableBody && subjectRecapTableBody.getElementsByTagName('tr').length <= 1; // 1 for the initial message
 
+            if (recapLoading && isDailyRecapEmpty) recapLoading.classList.remove('hidden');
+            if (subjectRecapLoading) subjectRecapLoading.classList.add('hidden'); // Sembunyikan loading untuk rekap subjek awal
+
+            if (recapTableBody) recapTableBody.innerHTML = '';
+            
             try {
-                // Perhatian: Ganti URL ini dengan URL publikasi CSV dari Google Sheet Anda
                 const response = await fetch(googleSheetRecapURL);
                 const csvText = await response.text();
                 allRecapData = parseCSV(csvText);
-                renderRecapTable(); // Render table with all data initially
+                renderRecapTable(); // Tampilkan tabel rekap harian secara otomatis
+                
+                // Tambahkan pesan default untuk rekap per mata pelajaran
+                if(subjectRecapTableBody){
+                    subjectRecapTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-gray-500">Pilih mata pelajaran dan kelas, lalu klik **Lihat Rekap** untuk menampilkan data.</td></tr>`;
+                }
             } catch (error) {
                 console.error('Error loading recap data:', error);
-                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">Gagal memuat data rekapitulasi.</td></tr>`;
+                const errorMessage = `<tr><td colspan="8" class="text-center py-4 text-red-500">Gagal memuat data rekapitulasi.</td></tr>`;
+                if (recapTableBody) recapTableBody.innerHTML = errorMessage;
+                if (subjectRecapTableBody) subjectRecapTableBody.innerHTML = errorMessage;
             } finally {
-                recapLoading.classList.add('hidden');
+                if (recapLoading) recapLoading.classList.add('hidden');
+                if (subjectRecapLoading) subjectRecapLoading.classList.add('hidden');
             }
         }
 
         /**
-         * Parses CSV text into an array of objects.
-         * Assumes the first row is the header.
-         * @param {string} csv - The CSV data as a string.
-         * @returns {Array<Object>} An array of objects representing the CSV data.
+         * Mengurai teks CSV menjadi array objek.
+         * Mengasumsikan baris pertama adalah header.
+         * @param {string} csv - Data CSV sebagai string.
+         * @returns {Array<Object>} Array objek yang mewakili data CSV.
          */
         function parseCSV(csv) {
-            const lines = csv.split('\n').filter(line => line.trim() !== ''); // Filter out empty lines
-            if (lines.length === 0) return [];
+            const lines = csv.split('\n').filter(line => line.trim() !== ''); // Filter baris kosong
+            if (lines.length <= 1) return []; // Return empty array if no data or only headers
 
             const headers = lines[0].split(',').map(header => header.trim().replace(/"/g, ''));
             const data = [];
@@ -737,7 +872,7 @@
                 if (values.length === headers.length) {
                     let row = {};
                     headers.forEach((header, index) => {
-                        row[header.toLowerCase().replace(/\s/g, '_')] = values[index]; // Convert headers to snake_case
+                        row[header.toLowerCase().replace(/\s/g, '_')] = values[index]; // Ubah header ke snake_case
                     });
                     data.push(row);
                 }
@@ -746,15 +881,15 @@
         }
 
         /**
-         * Renders the recap table and updates the summary based on filtered data.
+         * Menampilkan tabel rekap harian dan mengupdate ringkasan berdasarkan data yang difilter.
          */
         function renderRecapTable() {
-            let filteredData = [...allRecapData]; // Create a mutable copy
+            let filteredData = [...allRecapData]; // Buat salinan yang dapat diubah
 
-            const selectedClass = filterClass.value;
-            const selectedSubject = filterSubject.value;
-            const searchName = filterName.value.toLowerCase();
-            const selectedDate = filterDate.value;
+            const selectedClass = filterClass ? filterClass.value : '';
+            const selectedSubject = filterSubject ? filterSubject.value : '';
+            const searchName = filterName ? filterName.value.toLowerCase() : '';
+            const selectedDate = filterDate ? filterDate.value : '';
 
             if (selectedClass) {
                 filteredData = filteredData.filter(record => record.kelas === selectedClass);
@@ -766,95 +901,238 @@
                 filteredData = filteredData.filter(record => record.nama_lengkap.toLowerCase().includes(searchName));
             }
             if (selectedDate) {
-                filteredData = filteredData.filter(record => record.tanggal === selectedDate);
+                filteredData = filteredData.filter(record => record.tanggal_absen === selectedDate);
             }
 
-            recapTableBody.innerHTML = ''; // Clear table before rendering
+            if (recapTableBody) recapTableBody.innerHTML = ''; // Hapus tabel sebelum menampilkan
             if (filteredData.length === 0) {
-                recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Tidak ada data absensi yang ditemukan.</td></tr>`;
-                recapSummary.classList.add('hidden');
+                if (recapTableBody) recapTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Tidak ada data absensi yang ditemukan.</td></tr>`;
+                if (recapSummary) recapSummary.classList.add('hidden');
             } else {
-                filteredData.forEach(record => {
+                filteredData.forEach((record, index) => {
                     const row = document.createElement('tr');
+                    row.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
                     row.innerHTML = `
                         <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${record.nis}</td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${record.nama_lengkap}</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${record.tanggal}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${record.tanggal_absen}</td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-semibold ${
-                            record.ket === 'Hadir' ? 'text-green-600' :
-                            record.ket === 'Sakit' ? 'text-yellow-600' :
-                            record.ket === 'Izin' ? 'text-blue-600' :
-                            record.ket === 'Alfa' ? 'text-red-600' : ''
-                        }">${record.ket}</td>
+                            record.keterangan === 'Hadir' ? 'text-green-600' :
+                            record.keterangan === 'Sakit' ? 'text-yellow-600' :
+                            record.keterangan === 'Izin' ? 'text-blue-600' :
+                            record.keterangan === 'Alfa' ? 'text-red-600' : ''
+                        }">${record.keterangan}</td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${record.kelas}</td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${record.mata_pelajaran}</td>
                     `;
-                    recapTableBody.appendChild(row);
+                    if (recapTableBody) recapTableBody.appendChild(row);
                 });
                 updateRecapSummary(filteredData, selectedClass, searchName);
             }
         }
 
         /**
-         * Updates the summary section with attendance counts.
-         * @param {Array<Object>} data - The filtered attendance data.
-         * @param {string} selectedClass - The currently selected class for filtering.
-         * @param {string} searchName - The currently searched student name.
+         * Menampilkan tabel rekap per mata pelajaran dengan merangkum absensi setiap siswa.
+         */
+        async function renderSubjectRecapTable() {
+            if (subjectRecapButton) subjectRecapButton.disabled = true;
+            if (recapText) recapText.classList.add('hidden');
+            if (recapSpinner) recapSpinner.classList.remove('hidden');
+
+            const selectedSubject = subjectRecapSelect ? subjectRecapSelect.value : '';
+            const selectedClass = subjectRecapClassSelect ? subjectRecapClassSelect.value : '';
+
+            if (subjectRecapTableBody) subjectRecapTableBody.innerHTML = ''; // Hapus tabel
+            if (subjectRecapLoading) subjectRecapLoading.classList.add('hidden');
+            
+            if (!selectedSubject || !selectedClass) {
+                if (subjectRecapTableBody) subjectRecapTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-red-500">Pilih mata pelajaran dan kelas terlebih dahulu.</td></tr>`;
+                if (subjectRecapButton) subjectRecapButton.disabled = !subjectRecapSelect.value || !subjectRecapClassSelect.value;
+                if (recapText) recapText.classList.remove('hidden');
+                if (recapSpinner) recapSpinner.classList.add('hidden');
+                return;
+            }
+
+            if (subjectRecapLoading) subjectRecapLoading.classList.remove('hidden');
+
+            // Tunggu sebentar untuk memberi kesan memuat
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const filteredBySubjectAndClass = allRecapData.filter(record =>
+                record.mata_pelajaran === selectedSubject && record.kelas === selectedClass
+            );
+            
+            // Kelompokkan absensi berdasarkan siswa
+            const studentSummary = {};
+
+            // Inisialisasi semua siswa untuk tabel ringkasan
+            const studentsInClass = studentsData[selectedClass];
+            if (studentsInClass) {
+                studentsInClass.forEach(student => {
+                    studentSummary[student.nis] = {
+                        nis: student.nis,
+                        nama: student.nama,
+                        kelas: selectedClass,
+                        Hadir: 0,
+                        Sakit: 0,
+                        Izin: 0,
+                        Alfa: 0
+                    };
+                });
+            }
+            
+            // Isi ringkasan dengan data aktual dari catatan yang difilter
+            filteredBySubjectAndClass.forEach(record => {
+                if (studentSummary[record.nis] && studentSummary[record.nis].hasOwnProperty(record.keterangan)) {
+                    studentSummary[record.nis][record.keterangan]++;
+                }
+            });
+            
+            const studentsWithAttendance = Object.values(studentSummary).filter(student =>
+                student.Hadir > 0 || student.Sakit > 0 || student.Izin > 0 || student.Alfa > 0
+            );
+
+            // Tampilkan tabel ringkasan
+            if (studentsWithAttendance.length === 0) {
+                 if (subjectRecapTableBody) subjectRecapTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-gray-500">Tidak ada data absensi yang ditemukan untuk mata pelajaran dan kelas yang dipilih.</td></tr>`;
+            } else {
+                let sortedStudents = studentsWithAttendance.sort((a,b) => a.nama.localeCompare(b.nama));
+                
+                let tableHTML = '';
+                sortedStudents.forEach((student, index) => {
+                    const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                    
+                    // Hitung total pertemuan dan persentase kehadiran
+                    const totalPertemuan = student.Hadir + student.Sakit + student.Izin + student.Alfa;
+                    const persentaseKehadiran = totalPertemuan > 0 ? ((student.Hadir / totalPertemuan) * 100).toFixed(2) : 0;
+                    
+                    // Atur warna berdasarkan persentase
+                    let persentaseColorClass = 'text-gray-800';
+                    if (persentaseKehadiran >= 80) {
+                        persentaseColorClass = 'text-green-600 font-bold';
+                    } else if (persentaseKehadiran >= 60) {
+                        persentaseColorClass = 'text-yellow-600 font-bold';
+                    } else {
+                        persentaseColorClass = 'text-red-600 font-bold';
+                    }
+
+                    tableHTML += `
+                        <tr class="hover:bg-gray-100 ${rowClass}">
+                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${student.nis}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800">${student.nama}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-bold text-green-600">${student.Hadir}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-bold text-yellow-600">${student.Sakit}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-bold text-blue-600">${student.Izin}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-bold text-red-600">${student.Alfa}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">${totalPertemuan}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-center ${persentaseColorClass}">${persentaseKehadiran}%</td>
+                        </tr>
+                    `;
+                });
+                if (subjectRecapTableBody) subjectRecapTableBody.innerHTML = tableHTML;
+            }
+            if (subjectRecapLoading) subjectRecapLoading.classList.add('hidden');
+            if (subjectRecapButton) subjectRecapButton.disabled = !subjectRecapSelect.value || !subjectRecapClassSelect.value;
+            if (recapText) recapText.classList.remove('hidden');
+            if (recapSpinner) recapSpinner.classList.add('hidden');
+        }
+        
+        /**
+         * Menemukan kelas seorang siswa berdasarkan NIS mereka.
+         * @param {string} nis - NIS siswa.
+         * @returns {string} Nama kelas atau 'N/A' jika tidak ditemukan.
+         */
+        function getStudentClass(nis) {
+            for (const classname in studentsData) {
+                const found = studentsData[classname].find(student => student.nis === nis);
+                if (found) {
+                    return classname;
+                }
+            }
+            return 'N/A';
+        }
+
+        /**
+         * Mengupdate bagian ringkasan dengan jumlah absensi.
+         * @param {Array<Object>} data - Data absensi yang sudah difilter.
+         * @param {string} selectedClass - Kelas yang saat ini dipilih untuk difilter.
+         * @param {string} searchName - Nama siswa yang saat ini dicari.
          */
         function updateRecapSummary(data, selectedClass, searchName) {
             const counts = { Hadir: 0, Sakit: 0, Izin: 0, Alfa: 0 };
             data.forEach(record => {
-                if (counts.hasOwnProperty(record.ket)) {
-                    counts[record.ket]++;
+                if (counts.hasOwnProperty(record.keterangan)) {
+                    counts[record.keterangan]++;
                 }
             });
 
-            summaryHadir.textContent = counts.Hadir;
-            summarySakit.textContent = counts.Sakit;
-            summaryIzin.textContent = counts.Izin;
-            summaryAlfa.textContent = counts.Alfa;
+            if (summaryHadir) summaryHadir.textContent = counts.Hadir;
+            if (summarySakit) summarySakit.textContent = counts.Sakit;
+            if (summaryIzin) summaryIzin.textContent = counts.Izin;
+            if (summaryAlfa) summaryAlfa.textContent = counts.Alfa;
 
             if (searchName) {
-                summaryTitle.textContent = 'Ringkasan Absensi Siswa';
-                summaryTargetName.textContent = filterName.value;
+                if (summaryTitle) summaryTitle.textContent = 'Ringkasan Absensi Siswa';
+                if (summaryTargetName) summaryTargetName.textContent = filterName.value;
             } else if (selectedClass) {
-                summaryTitle.textContent = 'Ringkasan Absensi Kelas';
-                summaryTargetName.textContent = selectedClass;
+                if (summaryTitle) summaryTitle.textContent = 'Ringkasan Absensi Kelas';
+                if (summaryTargetName) summaryTargetName.textContent = selectedClass;
             } else {
-                summaryTitle.textContent = 'Ringkasan Absensi Keseluruhan';
-                summaryTargetName.textContent = ''; // Clear if no specific class or name is filtered
+                if (summaryTitle) summaryTitle.textContent = 'Ringkasan Absensi Keseluruhan';
+                if (summaryTargetName) summaryTargetName.textContent = ''; // Hapus jika tidak ada kelas atau nama spesifik yang difilter
             }
-            recapSummary.classList.remove('hidden');
+            if (recapSummary) recapSummary.classList.remove('hidden');
         }
 
 
-        // Event listeners for recap filters
-        filterClass.addEventListener('change', renderRecapTable);
-        filterSubject.addEventListener('change', renderRecapTable);
-        filterName.addEventListener('input', renderRecapTable); // Use 'input' for real-time filtering
-        filterDate.addEventListener('change', renderRecapTable);
+        // Event listeners untuk filter rekap
+        if (filterClass) filterClass.addEventListener('change', renderRecapTable);
+        if (filterSubject) filterSubject.addEventListener('change', renderRecapTable);
+        if (filterName) filterName.addEventListener('input', renderRecapTable); // Gunakan 'input' untuk pemfilteran real-time
+        if (filterDate) filterDate.addEventListener('change', renderRecapTable);
+        
+        // Event listener untuk tombol rekap per mata pelajaran yang baru
+        if (subjectRecapButton) subjectRecapButton.addEventListener('click', renderSubjectRecapTable);
+        
+        // Event listener untuk menonaktifkan tombol jika tidak ada mata pelajaran atau kelas yang dipilih
+        const updateSubjectRecapButtonState = () => {
+             if (subjectRecapButton) {
+                 const isSubjectSelected = !!subjectRecapSelect.value;
+                 const isClassSelected = !!subjectRecapClassSelect.value;
+                 subjectRecapButton.disabled = !(isSubjectSelected && isClassSelected);
+             }
+        };
 
-        // --- INITIALIZATION ---
+        if (subjectRecapSelect) subjectRecapSelect.addEventListener('change', updateSubjectRecapButtonState);
+        if (subjectRecapClassSelect) subjectRecapClassSelect.addEventListener('change', updateSubjectRecapButtonState);
+        
+
+        // --- INISIALISASI ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Set current date to the date input field
+            // Atur tanggal saat ini ke input tanggal
             const today = new Date();
             const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Bulan adalah 0-indexed
             const dd = String(today.getDate()).padStart(2, '0');
-            dateInput.value = `${yyyy}-${mm}-${dd}`;
+            if (dateInput) dateInput.value = `${yyyy}-${mm}-${dd}`;
 
-            updateClock(); // Initial clock update
-            setInterval(updateClock, 1000); // Update clock every second
+            updateClock(); // Pembaruan jam awal
+            setInterval(updateClock, 1000); // Perbarui jam setiap detik
 
-            populateStudentList(); // Populate student list on initial load
+            populateStudentList(); // Isi daftar siswa saat muat awal
             
-            // Ensure the correct navigation button is active on load
-            navAbsen.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'font-semibold', 'py-3', 'px-6', 'shadow-md');
-            navAbsen.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
+            // Atur tombol navigasi awal yang aktif
+            if (navAbsen) {
+                navAbsen.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white', 'font-semibold', 'py-3', 'px-6', 'shadow-md');
+                navAbsen.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-gray-700');
+            }
+            
+            // Nonaktifkan tombol rekap per mata pelajaran di awal
+            updateSubjectRecapButtonState();
         });
 
-        // Event listener for class selection change
-        classSelect.addEventListener('change', populateStudentList);
+        // Event listener untuk perubahan pilihan kelas
+        if (classSelect) classSelect.addEventListener('change', populateStudentList);
     </script>
 </body>
 </html>
